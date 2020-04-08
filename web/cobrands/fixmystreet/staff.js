@@ -212,9 +212,9 @@ fixmystreet.staff_set_up = {
         var $checkbox = $(this);
         var toggle_public_update = function() {
             if ($checkbox.prop('checked')) {
-                $('#public_update').parents('p').show();
+                $('#public_update_form_fields').show();
             } else {
-                $('#public_update').parents('p').hide();
+                $('#public_update_form_fields').hide();
             }
         };
         $checkbox.on('change', function() {
