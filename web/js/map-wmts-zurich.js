@@ -107,21 +107,21 @@ fixmystreet.maps.matrix_ids = [
     }
 
     $(function(){
-        $('#map_layer_toggle').toggle(function(){
-            $(this).text('Luftbild');
-            fixmystreet.map.setBaseLayer(fixmystreet.map.layers[1]);
-        }, function(){
-            $(this).text('Stadtplan');
-            fixmystreet.map.setBaseLayer(fixmystreet.map.layers[0]);
+        $('#map_layer_toggle').click(function(e){
+            e.preventDefault();
+            var $this = $(this);
+            if ($this.text() == 'Stadtplan') {
+                $this.text('Luftbild');
+                fixmystreet.map.setBaseLayer(fixmystreet.map.layers[1]);
+            } else {
+                $this.text('Stadtplan');
+                fixmystreet.map.setBaseLayer(fixmystreet.map.layers[0]);
+            }
         });
 
-        /* Admin dragging of pin */
+        /* admin dragging of pin */
         if (fixmystreet.page == 'admin') {
-            if ($.browser.msie) {
-                $(window).load(function() { fixmystreet.maps.admin_drag(pin_dragged, true); });
-            } else {
-                fixmystreet.maps.admin_drag(pin_dragged, true);
-            }
+            fixmystreet.maps.admin_drag(pin_dragged, true);
         }
     });
 
