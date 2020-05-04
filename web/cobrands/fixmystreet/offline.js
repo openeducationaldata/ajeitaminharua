@@ -28,6 +28,23 @@ fixmystreet.offlineBanner = (function() {
         $('.top_banner--offline').slideUp();
     }
 
+    // Compare two typed arrays for equality
+    function isEqual(view1, view2) {
+        for (var i=0; i != view1.byteLength; i++) {
+            if (view1[i] != view2[i]) return false;
+        }
+        return true;
+    }
+
+    // Create a Uint8Array of a string
+    function makeView(str) {
+        var view = new Uint8Array(str.length);
+        for (var i=0; i<str.length; i++) {
+            view[i] = str.charCodeAt(i);
+        }
+        return view;
+    }
+
     return {
         make: function(offline) {
             fixmystreet.offlineData.getFormsLength().then(function(num) {
@@ -61,7 +78,13 @@ fixmystreet.offlineBanner = (function() {
             }
 
             function postForm(url, data) {
-                return $.ajax({ url: url, data: data, type: 'POST' }).done(nextForm);
+                return $.ajax({
+                    url: url,
+                    contentType: data.contentType,
+                    data: data.text,
+                    type: 'POST',
+                    processData: false
+                }).done(nextForm);
             }
 
             $(document).on('click', '#oFN', function(e) {
@@ -83,8 +106,23 @@ fixmystreet.offlineBanner = (function() {
                                 if (!token) {
                                     return nextForm();
                                 }
-                                var param = form[1].replace(/&token=[^&]*/, '&token=' + token);
-                                return postForm(form[0], param).fail(nextForm);
+
+                                var tokenView = makeView(token);
+                                var tokenName = makeView('name="token"\r\n\r\n');
+
+                                // Make a typed array to update the request body with
+                                // This only works because tokens are always the same length
+                                var curView = new Uint8Array(form[1].text);
+
+                                // Find the spot at which the token is in the buffer
+                                var idxS = curView.findIndex(function isToken(element, i, array) {
+                                    var sl = array.slice(i, i+tokenName.byteLength);
+                                    return isEqual(sl, tokenName);
+                                });
+                                // Replace the old token with the new one in the right spot
+                                curView.set(tokenView, idxS + tokenName.byteLength);
+
+                                return postForm(form[0], form[1]).fail(nextForm);
                             });
                         });
                     });
