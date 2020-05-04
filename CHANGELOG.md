@@ -80,6 +80,7 @@
         - Show error page when submitting with web param to /import. #2233
         - Add a daemon option for sending reports and updates. #2924
         - Update Getopt::Long::Descriptive to stop warning. #3003
+        - Drop support for IE8, upgrade jQuery. #3017
     - Open311 improvements:
         - Allow save/drop of row extra during sending. #2788
         - Match response templates on external status code over state. #2921

@@ -12,11 +12,11 @@ $(function() {
 
     // Row highlighting/clicking
 
-    $('.row-link').hover(function(){
+    $('.row-link').on('mouseenter mouseleave', function(){
         $(this).toggleClass("active");
-    }).click(function(){
+    }).on('click', function(){
         window.location = this.getElementsByTagName('a')[0];
-    }).find('td:last').hide();
+    }).find('td').last().hide();
 
     $('th.edit').hide();
 
@@ -101,7 +101,7 @@ $(function() {
 
     }).change();
 
-    $("form#report_edit input[type=submit]").click(function() {
+    $("form#report_edit input[type=submit]").on('click', function() {
         $("form#report_edit").data("clicked_button", $(this).attr("name"));
     });
 

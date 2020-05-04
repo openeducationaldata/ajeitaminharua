@@ -107,7 +107,7 @@ fixmystreet.maps.matrix_ids = [
     }
 
     $(function(){
-        $('#map_layer_toggle').click(function(e){
+        $('#map_layer_toggle').on('click', function(e){
             e.preventDefault();
             var $this = $(this);
             if ($this.text() == 'Stadtplan') {

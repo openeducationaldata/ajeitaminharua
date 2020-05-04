@@ -38,7 +38,7 @@ describe('Duplicate tests', function() {
       cy.wait('@report-ajax');
       cy.get('[id=category_group]').select('Potholes');
       cy.wait('@nearby-ajax');
-      cy.get('.js-hide-duplicate-suggestions:first').should('be.visible').click();
+      cy.get('.js-hide-duplicate-suggestions').first().should('be.visible').click();
       cy.get('[name=title]').type('Title');
       cy.get('[name=detail]').type('Detail');
       cy.get('.js-new-report-user-show').click();
@@ -58,7 +58,7 @@ describe('Duplicate tests', function() {
         body: { username: 'admin@example.org', password_sign_in: 'password' }
       });
       cy.visit('http://borsetshire.localhost:3001/reports');
-      cy.get('[href$="/report/1"]:last').click();
+      cy.get('[href$="/report/1"]').last().click();
       cy.get('#report_inspect_form #state').select('Duplicate');
       cy.get('#js-duplicate-reports li h3 a').should('have.attr', 'href', '/report/1');
     });
@@ -72,7 +72,7 @@ describe('Duplicate tests', function() {
       });
       cy.visit('http://borsetshire.localhost:3001/report/1');
       cy.contains('Back to all').click();
-      cy.get('[href$="/report/1"]:last').click();
+      cy.get('[href$="/report/1"]').last().click();
       cy.get('#report_inspect_form #state').select('Duplicate');
       cy.get('#js-duplicate-reports li h3 a').should('have.attr', 'href', '/report/1');
     });

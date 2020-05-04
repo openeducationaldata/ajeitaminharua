@@ -15,7 +15,7 @@
         }
     }
 
-    $('#demo-user-list button').click(function(){
+    $('#demo-user-list button').on('click', function(){
         var form = document.forms.general_auth;
         form.username.value = $(this).data('email');
         form.password_sign_in.value = 'password';

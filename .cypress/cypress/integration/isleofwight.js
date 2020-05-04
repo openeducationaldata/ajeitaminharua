@@ -13,11 +13,11 @@ describe('When you look at the Island Roads site', function() {
   it('uses the correct name', function() {
     cy.get('#map_box').click();
     cy.wait('@report-ajax');
-    cy.get('select:eq(4)').select('Potholes');
+    cy.get('select').eq(4).select('Potholes');
     cy.contains('sent to Island Roads');
-    cy.get('select:eq(4)').select('Private');
+    cy.get('select').eq(4).select('Private');
     cy.contains('sent to Island Roads');
-    cy.get('select:eq(4)').select('Extra');
+    cy.get('select').eq(4).select('Extra');
     cy.contains('Help Island Roads');
   });
 

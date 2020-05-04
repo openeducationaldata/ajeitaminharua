@@ -12,7 +12,7 @@ describe('new report form', function() {
   });
 
   it('is hidden when emergency option is yes', function() {
-    cy.get('select:eq(4)').select('Fallen branch');
+    cy.get('select').eq(4).select('Fallen branch');
     cy.get('#form_emergency').select('yes');
     cy.get('#js-category-stopper').should('contain', 'Please phone customer services to report this problem.');
     cy.get('.js-hide-if-invalid-category').should('be.hidden');
@@ -22,7 +22,7 @@ describe('new report form', function() {
   });
 
   it('is hidden when private land option is yes', function() {
-    cy.get('select:eq(4)').select('Fallen branch');
+    cy.get('select').eq(4).select('Fallen branch');
     cy.get('#form_private_land').select('yes');
     cy.get('#js-category-stopper').should('contain', 'The council do not have powers to address issues on private land.');
     cy.get('.js-hide-if-invalid-category').should('be.hidden');

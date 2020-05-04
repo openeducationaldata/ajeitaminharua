@@ -65,7 +65,7 @@ fixmystreet.staff_set_up = {
           fixmystreet.utils.toggle_shortlist($submitButton, 'add', report_id);
         }
         fixmystreet.update_list_item_buttons($list);
-      }).complete(function() {
+      }).always(function() {
         if ($hiddenInput) {
           $hiddenInput.remove();
         }
@@ -155,7 +155,7 @@ fixmystreet.staff_set_up = {
     }
 
     function populateSelect($select, data, label_formatter) {
-      $select.find('option:gt(0)').remove();
+      $select.find('option').slice(1).remove();
       if (data.constructor !== Array) {
         return;
       }
@@ -299,7 +299,7 @@ fixmystreet.staff_set_up = {
                   $(this).prop('disabled', false); // in case disabled above
               });
 
-              $elem.find('.cancel').click( function () {
+              $elem.find('.cancel').on('click', function() {
                   $elem.toggleClass('show-moderation');
                   $('.js-moderation-error').hide();
                   $('#map_sidebar').scrollTop(word === 'problem' ? 0 : $elem[0].offsetTop);
