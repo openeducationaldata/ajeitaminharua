@@ -12,16 +12,16 @@ my ($cobrand, $coords, $area_id, $name, $mapit_url, $coverage);
 BEGIN {
     $config_file = 'conf/general.yml-example';
     $cobrand = [qw(
-        borsetshire
-        fixmystreet
-        northamptonshire
         bathnes
+        borsetshire
         buckinghamshire
+        fixmystreet
         hounslow
         isleofwight
+        northamptonshire
+        oxfordshire
         peterborough
         tfl
-        oxfordshire
     )];
     $coords = '51.532851,-2.284277';
     $area_id = 2608;
