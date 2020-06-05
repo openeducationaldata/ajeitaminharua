@@ -233,7 +233,7 @@ FixMyStreet::override_config {
         $user->update;
     };
 
-    subtest "test update is required when instructing" => sub {
+    subtest "test public update is required if include_update is checked" => sub {
         $report->update;
         $report->comments->delete_all;
         $mech->get_ok("/report/$report_id");
