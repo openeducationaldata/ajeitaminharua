@@ -464,7 +464,7 @@ sub inspect : Private {
                 }
             }
 
-            if ( $c->get_param('include_update') ) {
+            if ( $c->get_param('include_update') or $c->get_param('raise_defect') ) {
                 $update_text = Utils::cleanup_text( $c->get_param('public_update'), { allow_multiline => 1 } );
                 if (!$update_text) {
                     $valid = 0;
