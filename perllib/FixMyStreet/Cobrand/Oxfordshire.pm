@@ -138,6 +138,14 @@ sub open311_config_updates {
     $params->{use_customer_reference} = 1;
 }
 
+sub open311_munge_update_params {
+    my ($self, $params, $comment, $body) = @_;
+
+    if ($comment->get_extra_metadata('inspected')) {
+        $params->{raise_defect} = 1;
+    }
+}
+
 sub should_skip_sending_update {
     my ($self, $update ) = @_;
 
