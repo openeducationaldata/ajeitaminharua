@@ -49,6 +49,13 @@ around open311_extra_data_include => sub {
         if ($_->{name} eq 'description') {
             my ($ref) = grep { $_->{name} =~ /pcc-Skanska-csc-ref/i } @{$row->get_extra_fields};
             $_->{value} .= "\n\nSkanska CSC ref: $ref->{value}" if $ref;
+
+            if ($row->contact->email =~ /Bartec/) {
+                my $asset_details = "\n\nAsset id: " . $row->get_extra_field_value('central_asset_id') . "\n" .
+                                    "Asset detail: " . $row->get_extra_field_value('asset_details');
+
+                $_->{value} .= $asset_details;
+            }
         }
     }
     if ( $row->contact->email =~ /Bartec/ ) {
