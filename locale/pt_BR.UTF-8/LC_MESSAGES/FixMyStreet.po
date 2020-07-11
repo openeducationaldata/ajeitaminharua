@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: matthew@mysociety.org\n"
 "POT-Creation-Date: 2020-05-06 13:37+0100\n"
-"PO-Revision-Date: 2019-04-29 18:03+0000\n"
+"PO-Revision-Date: 2020-07-11 03:12-0300\n"
 "Last-Translator: Eugenio Pierazzoli <pierazzoli@gmail.com>, 2019\n"
 "Language-Team: Portuguese (Brazil) (https://www.transifex.com/mysociety/teams/12067/pt_BR/)\n"
 "Language: pt_BR\n"
@@ -20,6 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 2.3.1\n"
 
 #: perllib/FixMyStreet/DB/Result/Problem.pm:714
 #: perllib/FixMyStreet/DB/Result/Problem.pm:716
@@ -193,13 +194,12 @@ msgid "-- Pick an option --"
 msgstr " -- Escolha uma opção -- "
 
 #: templates/web/base/contact/enquiry/index.html:35
-#, fuzzy
 msgid "-- Please select --"
-msgstr "Por favor, selecione um orgão"
+msgstr "-- Selecione --"
 
 #: templates/web/base/admin/response_templates_select.html:3
 msgid "--Choose a template--"
-msgstr "--Escolha um template--"
+msgstr "-- Escolha um modelo --"
 
 #: templates/web/base/admin/bodies/form.html:50
 #: templates/web/base/admin/bodies/form.html:51
