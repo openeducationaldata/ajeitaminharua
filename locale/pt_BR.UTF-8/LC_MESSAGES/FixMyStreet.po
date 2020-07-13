@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: matthew@mysociety.org\n"
 "POT-Creation-Date: 2020-05-06 13:37+0100\n"
-"PO-Revision-Date: 2020-07-11 03:12-0300\n"
+"PO-Revision-Date: 2020-07-12 21:41-0300\n"
 "Last-Translator: Eugenio Pierazzoli <pierazzoli@gmail.com>, 2019\n"
 "Language-Team: Portuguese (Brazil) (https://www.transifex.com/mysociety/teams/12067/pt_BR/)\n"
 "Language: pt_BR\n"
@@ -26,7 +26,7 @@ msgstr ""
 #: perllib/FixMyStreet/DB/Result/Problem.pm:716
 #: perllib/FixMyStreet/Queue/Item/Report.pm:194
 msgid " and "
-msgstr "e"
+msgstr " e "
 
 #. ("JS")
 #: templates/web/base/js/translation_strings.html:52
@@ -37,7 +37,7 @@ msgstr "e"
 #: templates/web/base/report/new/top_message_some.html:10
 #: templates/web/base/report/new/top_message_some.html:12
 msgid " or "
-msgstr "ou"
+msgstr " ou "
 
 #: templates/web/base/report/inspect/_extra_details_field.html:5
 msgid "%d characters maximum"
@@ -69,7 +69,7 @@ msgstr "%s admin:"
 
 #: templates/web/base/status/stats.html:26
 msgid "%s bodies"
-msgstr "%s orgãos"
+msgstr "%s órgãos"
 
 #: templates/web/base/status/stats.html:24
 msgid "%s confirmed alerts, %s unconfirmed"
@@ -191,7 +191,7 @@ msgstr "-- Escolha uma categoria --"
 
 #: templates/web/base/report/new/category_extras_fields.html:19
 msgid "-- Pick an option --"
-msgstr " -- Escolha uma opção -- "
+msgstr "-- Escolha uma opção --"
 
 #: templates/web/base/contact/enquiry/index.html:35
 msgid "-- Please select --"
@@ -304,7 +304,7 @@ msgstr "Adicionar corpo"
 #: templates/web/base/auth/change_email.html:2
 #: templates/web/base/auth/change_email.html:7
 msgid "Add email address"
-msgstr "Adicionar e-mail"
+msgstr "Adicionar endereço de e-mail"
 
 #: templates/web/base/admin/reportextrafields/index.html:24
 msgid "Add extra fields"
@@ -684,7 +684,7 @@ msgstr "Categoria alterada de ‘%s’ para ‘%s’"
 #: templates/web/base/admin/stats/fix_rate.html:1
 #: templates/web/base/admin/stats/index.html:14
 msgid "Category fix rate for problems > 4 weeks old"
-msgstr "Taxa de correção para categoria de problemas > 4 semanas "
+msgstr "Taxa de correção para categoria de problemas > 4 semanas"
 
 #: templates/web/base/admin/reports/edit.html:131
 #: templates/web/base/dashboard/index.html:39
@@ -750,11 +750,11 @@ msgstr "Clique no link em nosso email de confrmação para publicar seu problema
 
 #: templates/web/base/email_sent.html:11
 msgid "Click the link in our confirmation email to publish your update."
-msgstr " Clique no link em nosso email de confrmação para publicar sua atualização."
+msgstr "Clique no link do seu e-mail de confirmação para publicar sua atualização."
 
 #: templates/web/base/auth/token.html:23
 msgid "Click the link in our confirmation email to sign in."
-msgstr "Clique no link de nosso email de confirmação para entrar"
+msgstr "Clique no link de seu e-mail de confirmação para entrar."
 
 #: templates/web/base/auth/token.html:20
 msgid "Click the link in that email to sign in."
@@ -1451,7 +1451,7 @@ msgstr "Corpo externo"
 #: templates/web/base/admin/reports/edit.html:112
 #: templates/web/base/admin/templates/edit.html:63
 msgid "External status code"
-msgstr ""
+msgstr "Código de status externo"
 
 #: templates/web/base/admin/update_edit.html:57
 msgid "External status code:"
@@ -1504,7 +1504,7 @@ msgstr ""
 #: templates/web/base/report/form/user_loggedout_password.html:21
 #: templates/web/base/report/form/user_loggedout_password.html:8
 msgid "Fill in your details manually."
-msgstr "Preencha seus detalhes manualmente"
+msgstr "Preencha seus detalhes manualmente."
 
 #. ("JS")
 #: templates/web/base/js/translation_strings.html:71
@@ -2062,7 +2062,7 @@ msgstr "Listar todas os problemas denunciados"
 
 #: templates/web/base/around/on_map_list_items.html:18
 msgid "Loading reports…"
-msgstr "Carregando denúncias..."
+msgstr "Carregando denúncias…"
 
 #: perllib/FixMyStreet/App/Controller/Report/New.pm:1556
 #: templates/web/base/report/new/category_wrapper.html:9
@@ -2439,7 +2439,7 @@ msgstr "Próximo"
 
 #: templates/web/base/report/form/user.html:5
 msgid "Next:"
-msgstr "Próximo"
+msgstr "Próximo:"
 
 #: perllib/FixMyStreet/Cobrand/Default.pm:1262
 #: perllib/FixMyStreet/DB/Result/ModerationOriginalData.pm:121
@@ -2836,7 +2836,7 @@ msgstr ""
 #: templates/web/base/reports/index.html:76
 #: templates/web/base/reports/index.html:79
 msgid "Pick your council"
-msgstr "Escolha seu concelho:"
+msgstr "Escolha um concelho"
 
 #: templates/web/base/reports/index.html:66
 #: templates/web/base/reports/index.html:69
@@ -3112,7 +3112,7 @@ msgstr ""
 
 #: templates/web/zurich/admin/reports/edit.html:194
 msgid "Please select a body."
-msgstr "Por favor, selecione um orgão"
+msgstr "Por favor, selecione um orgão."
 
 #: perllib/FixMyStreet/App/Controller/Alert.pm:86
 msgid "Please select the feed you want"
@@ -3261,7 +3261,7 @@ msgstr ""
 
 #: perllib/FixMyStreet/App/Controller/Admin.pm:244
 msgid "Problem marked as open."
-msgstr "Problema marcado como aberto"
+msgstr "Problema marcado em aberto."
 
 #: templates/web/base/admin/stats/questionnaire.html:21
 msgid "Problem state change based on survey results"
@@ -3283,7 +3283,7 @@ msgstr "Problemas nas proximidades"
 
 #: templates/web/base/report/display_tools.html:22
 msgid "Problems on the map"
-msgstr " Problemas no mapa"
+msgstr "Problemas no mapa"
 
 #: db/alert_types.pl:14
 msgid "Problems recently reported fixed on FixMyStreet"
@@ -3536,7 +3536,7 @@ msgstr "Denunciar"
 #: templates/web/base/report/_item.html:60
 #: templates/web/base/report/inspect/information.html:7
 msgid "Report ID:"
-msgstr "ID da Denúnciia"
+msgstr "ID da Denúncia:"
 
 #. ("JS")
 #: templates/web/base/header_logo.html:2
@@ -3573,7 +3573,7 @@ msgstr "Denunciar outro problema aqui"
 
 #: templates/web/base/report/new/form_user_loggedin.html:18
 msgid "Report as"
-msgstr "Denunciar como: "
+msgstr "Denunciar como"
 
 #: templates/web/base/report/new/form_public_councils_text.html:3
 #, fuzzy
@@ -4460,7 +4460,7 @@ msgstr "Obrigado por sua pergunta"
 
 #: templates/web/base/questionnaire/completed.html:5
 msgid "Thank you for your feedback"
-msgstr "Obrigado pelo seu feedback."
+msgstr "Obrigado por sua opinião"
 
 #: templates/web/base/around/_error_multiple.html:26
 msgid "Thanks for uploading your photo. We now need to locate your problem, so please enter a nearby street name or postcode in the box above&nbsp;:"
@@ -4624,7 +4624,7 @@ msgstr ""
 
 #: db/alert_types.pl:11
 msgid "The latest problems reported by users"
-msgstr "Os últimos problemas denunciados pelos usuários."
+msgstr "Últimos problemas denunciados pelos usuários."
 
 #: db/alert_types.pl:15
 msgid "The latest problems reported fixed by users"
@@ -5738,7 +5738,7 @@ msgstr ""
 
 #: templates/web/base/admin/timeline.html:4
 msgid "by %s"
-msgstr "por %s "
+msgstr "por %s"
 
 #: templates/web/base/reports/body.html:13
 #: templates/web/base/reports/body.html:14
@@ -5848,7 +5848,7 @@ msgstr "sair"
 
 #: templates/web/base/admin/users/import.html:71
 msgid "the database id of the body to associate that user with, e.g. <code>2217</code> for Buckinghamshire."
-msgstr "o ID do banco de dados do corpo para associar esse usuário, por exemplo, <code>2217</code> para Buckinghamshire"
+msgstr "o ID do banco de dados do corpo para associar esse usuário, por exemplo, <code>2217</code> para Prefeitura Municipal de Juazeiro do Norte"
 
 #: templates/web/base/report/new/form_public_councils_text.html:6
 msgid "the local council"
@@ -6050,7 +6050,7 @@ msgstr[1] "Ainda não temos detalhes para os conselhos que cobrem este local."
 #, perl-format
 msgid "last updated %d day ago"
 msgid_plural "last updated %d days ago"
-msgstr[0] "atualizado pela última vez %d dia atrás"
+msgstr[0] "atualizado pela última vez a %d dia atrás"
 msgstr[1] "atualizado pela última vez %d dias atŕas"
 
 #: templates/email/fixamingata/inactive-account.txt:8
