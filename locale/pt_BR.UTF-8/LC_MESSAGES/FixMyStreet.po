@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: matthew@mysociety.org\n"
 "POT-Creation-Date: 2020-05-06 13:37+0100\n"
-"PO-Revision-Date: 2020-07-12 21:41-0300\n"
+"PO-Revision-Date: 2020-07-12 23:53-0300\n"
 "Last-Translator: Eugenio Pierazzoli <pierazzoli@gmail.com>, 2019\n"
 "Language-Team: Portuguese (Brazil) (https://www.transifex.com/mysociety/teams/12067/pt_BR/)\n"
 "Language: pt_BR\n"
@@ -3340,7 +3340,7 @@ msgstr "Forneça uma atualização como"
 
 #: templates/web/base/report/form/user_loggedout_by_email.html:57
 msgid "Providing a password is optional, but doing so will allow you to more easily report future problems, leave updates and manage your reports."
-msgstr "Fornecer uma senha é opcional, mas definir uma te permitirá denunciar problemas, atualizar e administrar suas denúncias com mais facilidade no futuro, "
+msgstr "Fornecer uma senha é opcional, mas definir uma vai te denunciar problemas no futuro, assim como atualizar e administrar suas denúncias com mais facilidade."
 
 #: templates/web/base/report/form/user_loggedout_by_email.html:59
 msgid "Providing a password is optional, but doing so will allow you to more easily report problems, leave updates and manage your reports."
@@ -3387,7 +3387,7 @@ msgstr ""
 #: perllib/FixMyStreet/App/Controller/Questionnaire.pm:205
 #: templates/web/base/report/updates.html:20
 msgid "Questionnaire filled in by problem reporter"
-msgstr "Questionário preenchido pelo relator do problema "
+msgstr "Questionário preenchido pelo relator do problema"
 
 #: templates/web/base/alert/_list.html:35
 #: templates/web/base/alert/_list.html:53
@@ -3594,7 +3594,7 @@ msgstr "Denuncie seu problema"
 
 #: templates/web/base/header_opengraph.html:4
 msgid "Report, view, and discuss local street-related problems."
-msgstr "Denuncie, veja e discuta problemas locais"
+msgstr "Denuncie, veja e discuta problemas locais."
 
 #: templates/web/base/around/intro.html:1
 #: templates/web/zurich/around/intro.html:1
@@ -4094,7 +4094,7 @@ msgstr "Sair"
 
 #: templates/web/base/report/new/fill_in_details_text.html:2
 msgid "Some categories may require additional information."
-msgstr "Algumas categorias podem requerer informação adicional"
+msgstr "Algumas categorias podem requerer informação adicional."
 
 #: templates/web/base/admin/bodies/open311-form-fields.html:40
 #: templates/web/base/admin/bodies/open311-form-fields.html:41
@@ -4624,7 +4624,7 @@ msgstr ""
 
 #: db/alert_types.pl:11
 msgid "The latest problems reported by users"
-msgstr "Últimos problemas denunciados pelos usuários."
+msgstr "Últimos problemas denunciados pelos usuários"
 
 #: db/alert_types.pl:15
 msgid "The latest problems reported fixed by users"
@@ -4645,7 +4645,7 @@ msgstr ""
 #: templates/web/base/auth/change_password.html:26
 #: templates/web/base/auth/change_password.html:30
 msgid "The passwords do not match"
-msgstr "As senhas não são iguais."
+msgstr "As senhas não são iguais"
 
 #: templates/web/base/errors/page_error_404_not_found.html:9
 msgid "The requested URL '%s' was not found on this server"
@@ -4945,7 +4945,7 @@ msgstr "Código de acesso:"
 
 #: templates/web/base/reports/index.html:126
 msgid "Top 5 most used categories"
-msgstr "Top 5 categorias mais utilizadas "
+msgstr "Top 5 categorias mais utilizadas"
 
 #: templates/web/base/reports/index.html:111
 msgid "Top 5 responsive councils"
@@ -5324,7 +5324,7 @@ msgstr "Enviamos um código de confirmação para seu telefone. Por favor digite
 #: templates/web/base/report/display.html:35
 #: templates/web/base/report/new/oauth_email_form.html:5
 msgid "We need your email address, please give it below."
-msgstr "Nós precisamos do seu endereço de email, por favor, especifique-o abaixo"
+msgstr "Nós precisamos do seu endereço de e-mail, por favor, especifique-o abaixo."
 
 #: perllib/FixMyStreet/Queue/Item/Report.pm:149
 msgid "We realise this problem might be the responsibility of %s; however, we don't currently have any contact details for them. If you know of an appropriate contact address, please do get in touch."
@@ -5517,7 +5517,7 @@ msgstr "Você já anexou fotos para esta denúncia. Note que você pode anexar n
 #: templates/web/base/questionnaire/index.html:89
 #: templates/web/base/report/update/form_update.html:16
 msgid "You have already attached photos to this update.  Note that you can attach a maximum of 3 to this update (if you try to upload more, the oldest will be removed)."
-msgstr " Você já anexou fotos para esta atualização. Note que você pode anexar no máximo 3 para esta atualização (se você tentar anexar mais, a mais antiga será removida). "
+msgstr "Você já anexou fotos para esta atualização. Note que você pode anexar no máximo 3 fotos à esta atualização (se você tentar anexar mais, a mais antiga será removida)."
 
 #: templates/web/base/auth/sign_out.html:4
 #: templates/web/zurich/auth/sign_out.html:3
@@ -5632,7 +5632,7 @@ msgstr "Seu nome foi ocultado de todas as suas denúncias e atualizações."
 
 #: perllib/FixMyStreet/App/Controller/My.pm:297
 msgid "Your name has been hidden."
-msgstr "Seu nome foi ocultado"
+msgstr "Seu nome foi ocultado."
 
 #. ("JS")
 #: templates/web/base/js/translation_strings.html:95
@@ -5659,7 +5659,7 @@ msgstr ""
 #: templates/web/base/report/form/user_loggedout_by_email.html:59
 #: templates/web/zurich/auth/general.html:56
 msgid "Your password should include %d or more characters."
-msgstr "Sua senha deve ter %d ou mais caracteres. "
+msgstr "Sua senha deve ter %d ou mais caracteres."
 
 #: templates/web/base/auth/change_phone.html:19
 #: templates/web/base/contact/enquiry/index.html:25
@@ -5848,7 +5848,7 @@ msgstr "sair"
 
 #: templates/web/base/admin/users/import.html:71
 msgid "the database id of the body to associate that user with, e.g. <code>2217</code> for Buckinghamshire."
-msgstr "o ID do banco de dados do corpo para associar esse usuário, por exemplo, <code>2217</code> para Prefeitura Municipal de Juazeiro do Norte"
+msgstr "o ID do banco de dados , referente ao corpo a ser associado a esse usuário, por exemplo, <code>2217</code> para Prefeitura Municipal de Juazeiro do Norte"
 
 #: templates/web/base/report/new/form_public_councils_text.html:6
 msgid "the local council"
