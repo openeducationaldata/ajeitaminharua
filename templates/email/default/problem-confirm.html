@@ -18,7 +18,7 @@ Please note that [% c.cobrand.council_name %] is not responsible for this type
 of problem, so it will instead be sent to [% report.body %].
 [% END %]
 
-[% TRY %][% INCLUDE '_problem-confirm_extra.html' %][% CATCH file %][% END %]
+[% TRY %][% INCLUDE '_problem-confirm_extra.html' report=report %][% CATCH file %][% END %]
   </p>
   [% UNLESS report.non_public %]<p style="[% p_style %]">Your report will also appear on the [% site_name %] website.</p>[% END %]
   <p style="margin: 20px auto; text-align: center">

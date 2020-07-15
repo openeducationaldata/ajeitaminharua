@@ -1111,7 +1111,7 @@ sub process_report : Private {
 
     # save the cobrand and language related information
     $report->cobrand( $c->cobrand->moniker );
-    $report->cobrand_data( '' );
+    $report->cobrand_data( $c->stash->{cobrand_data} || '' );
     $report->lang( $c->stash->{lang_code} );
 
     return 1;
@@ -1631,7 +1631,7 @@ sub redirect_or_confirm_creation : Private {
         $c->forward( 'create_related_things' );
         if ($c->stash->{contributing_as_another_user} && $report->user->email
             && $report->user->id != $c->user->id
-            && !$c->cobrand->report_sent_confirmation_email) {
+            && !$c->cobrand->report_sent_confirmation_email($report)) {
                 $c->send_email( 'other-reported.txt', {
                     to => [ [ $report->user->email, $report->name ] ],
                 } );
@@ -1783,6 +1783,24 @@ sub generate_category_extra_json : Private {
     } @{ $c->stash->{category_extras}->{$c->stash->{category}} };
 
     return \@fields;
+}
+
+sub non_map_creation : Private {
+    my ($self, $c, $extras) = @_;
+
+    $c->forward('initialize_report');
+    $c->forward('check_for_category');
+    $c->forward('/auth/check_csrf_token');
+    $c->forward('process_report');
+    $c->forward('process_user');
+    if ($extras) {
+        $c->forward($_) for @$extras;
+    }
+    $c->forward('/photo/process_photo');
+    return 0 unless $c->forward('check_for_errors');
+    $c->forward('save_user_and_report');
+    return 1;
+
 }
 
 __PACKAGE__->meta->make_immutable;

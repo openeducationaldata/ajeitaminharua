@@ -466,7 +466,7 @@ sub inspect : Private {
                 }
             }
 
-            if ( $c->get_param('include_update') ) {
+            if ( $c->get_param('include_update') or $c->get_param('raise_defect') ) {
                 $update_text = Utils::cleanup_text( $c->get_param('public_update'), { allow_multiline => 1 } );
                 if (!$update_text) {
                     $valid = 0;
@@ -511,6 +511,14 @@ sub inspect : Private {
                 };
                 $c->user->create_alert($problem->id, $options);
             }
+
+            # If the state has been changed to action scheduled and they've said
+            # they want to raise a defect, consider the report to be inspected.
+            if ($problem->state eq 'action scheduled' && $c->get_param('raise_defect') && !$problem->get_extra_metadata('inspected')) {
+                $update_params{extra} = { 'defect_raised' => 1 };
+                $problem->set_extra_metadata( inspected => 1 );
+                $c->forward( '/admin/log_edit', [ $problem->id, 'problem', 'inspected' ] );
+            }
         }
 
         $problem->non_public($c->get_param('non_public') ? 1 : 0);
@@ -554,6 +562,12 @@ sub inspect : Private {
 
         $c->cobrand->call_hook(report_inspect_update_extra => $problem);
 
+        $c->forward('/photo/process_photo');
+        if ( my $photo_error  = delete $c->stash->{photo_error} ) {
+            $valid = 0;
+            push @{ $c->stash->{errors} }, $photo_error;
+        }
+
         if ($valid) {
             $problem->lastupdate( \'current_timestamp' );
             $problem->update;
@@ -574,6 +588,7 @@ sub inspect : Private {
                     created => $timestamp,
                     confirmed => $timestamp,
                     user => $c->user->obj,
+                    photo => $c->stash->{upload_fileid} || undef,
                     %update_params,
                 } );
             }

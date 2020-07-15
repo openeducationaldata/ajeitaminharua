@@ -660,6 +660,11 @@ $.extend(fixmystreet.set_up, {
   },
 
   dropzone: function($context) {
+    // we don't want to create this if we're offline (e.g using the inspector
+    // panel to add a photo) as the server side bit does not work.
+    if (!navigator.onLine) {
+      return;
+    }
 
     // Pass a jQuery element, eg $('.foobar'), into this function
     // to limit all the selectors to that element. Handy if you want

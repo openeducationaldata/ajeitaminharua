@@ -47,6 +47,32 @@ subtest 'open311 request handling', sub {
     };
 };
 
+subtest 'open311 bartec request handling', sub {
+    FixMyStreet::override_config {
+        STAGING_FLAGS => { send_reports => 1 },
+        ALLOWED_COBRANDS => ['peterborough' ],
+        MAPIT_URL => 'http://mapit.uk/',
+    }, sub {
+        my $contact = $mech->create_contact_ok(body_id => $peterborough->id, category => 'Litter', email => 'Bartec-Litter');
+        my ($p) = $mech->create_problems_for_body(1, $peterborough->id, 'Title', { category => 'Litter', latitude => 52.5608, longitude => 0.2405, cobrand => 'peterborough' });
+        $p->geocode({resourceSets => [ { resources => [ { address => { postalCode => 'ZZ1 1ZZ', addressLine => '23 A Street' } } ] } ] });
+        $p->update;
+
+        my $test_data = FixMyStreet::Script::Reports::send();
+
+        $p->discard_changes;
+        ok $p->whensent, 'Report marked as sent';
+        is $p->send_method_used, 'Open311', 'Report sent via Open311';
+        is $p->external_id, 248, 'Report has correct external ID';
+
+        my $req = $test_data->{test_req_used};
+        my $c = CGI::Simple->new($req->content);
+        is $c->param('attribute[postcode]'), 'ZZ1 1ZZ', 'postcode sent';
+        is $c->param('attribute[house_no]'), '23', 'house number sent';
+        is $c->param('attribute[street]'), 'A Street', 'street sent';
+    };
+};
+
 subtest "extra update params are sent to open311" => sub {
     FixMyStreet::override_config {
         MAPIT_URL => 'http://mapit.uk/',
