@@ -195,10 +195,11 @@ OpenLayers.Layer.NCCVectorNearest = OpenLayers.Class(OpenLayers.Layer.VectorNear
 // default options for northants assets include
 // a) checking for multiple assets in same location
 // b) preventing submission unless an asset is selected
-var northants_defaults = $.extend(true, {}, fixmystreet.assets.alloyv2_defaults, {
+var northants_defaults = $.extend(true, {}, fixmystreet.alloyv2_defaults, {
   class: OpenLayers.Layer.NCCVectorAsset,
   protocol_class: OpenLayers.Protocol.AlloyV2,
   http_options: {
+      base: "https://tilma.staging.mysociety.org/resource-proxy/proxy.php?https://northants.assets/${layerid}/${x}/${y}/${z}/cluster?styleIds=${styleid}",
       layerid: is_live ? 26 : 'layers_highwayAssetsCustom_5d4806b0fe2ad809d85a774f'
   },
   non_interactive: false,
@@ -253,9 +254,10 @@ fixmystreet.alloy_add_layers(northants_defaults, layers);
 
 // NCC roads layers which prevent report submission unless we have selected
 // an asset.
-var northants_road_defaults = $.extend(true, {}, fixmystreet.assets.alloyv2_defaults, {
+var northants_road_defaults = $.extend(true, {}, fixmystreet.alloyv2_defaults, {
     protocol_class: OpenLayers.Protocol.AlloyV2,
     http_options: {
+        base: "https://tilma.staging.mysociety.org/resource-proxy/proxy.php?https://northants.assets/${layerid}/${x}/${y}/${z}/cluster?styleIds=${styleid}",
         layerid: is_live ? 26 : 'layers_highwayAssetsCustom_5d4806b0fe2ad809d85a774f'
     },
     body: "Northamptonshire County Council",
