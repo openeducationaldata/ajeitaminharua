@@ -9,7 +9,8 @@
         - Add lazy image loading on list items.
         - Improve Bing geocoder results.
         - Add option of checking passwords against Have I Been Pwned.
-        - Add aerial maps option to Bing maps.
+        - Add aerial maps option to Bing and OSM maps.
+        - Select matches for both filter category and group. #3110
     - Changes:
         - Mark user as active when sent an email alert.
     - Bugfixes:
@@ -25,6 +26,8 @@
         - Improve compatibility with G Suite OpenID Connect authentication. #3032
         - Fix duplicate asset message after dismissing duplicate suggestions.
         - Improve moderation diff display in a few small ways. #3105
+        - Do not have bootstrap run sudo commands. #2930
+        - Fix lookups in templates of categories with &s.
     - Admin improvements:
         - Display user name/email for contributed as reports. #2990
         - Interface for enabling anonymous reports for certain categories. #2989
