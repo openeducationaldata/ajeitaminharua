@@ -177,7 +177,7 @@ var bin_defaults = $.extend(true, {}, defaults, {
         central_asset_id: 'OBJECTID'
     },
     asset_id_field: 'OBJECTID',
-    asset_type: 'spot',
+    asset_type: 'spot'
 });
 
 fixmystreet.assets.add(bin_defaults, {
@@ -187,7 +187,7 @@ fixmystreet.assets.add(bin_defaults, {
       }
     },
     asset_category: 'Litter bin',
-    asset_item: 'litter bin',
+    asset_item: 'litter bin'
 });
 
 fixmystreet.assets.add(bin_defaults, {
@@ -197,7 +197,7 @@ fixmystreet.assets.add(bin_defaults, {
       }
     },
     asset_category: 'Dog bin',
-    asset_item: 'dog waste bin',
+    asset_item: 'dog waste bin'
 });
 
 })();
