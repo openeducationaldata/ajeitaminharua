@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: matthew@mysociety.org\n"
 "POT-Creation-Date: 2020-05-06 13:37+0100\n"
-"PO-Revision-Date: 2020-08-23 17:24-0300\n"
+"PO-Revision-Date: 2020-08-25 00:11-0300\n"
 "Last-Translator: Kennet Calixto <kennet.emerson@gmail.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
 "Language: pt_BR\n"
@@ -1033,7 +1033,7 @@ msgstr "Desenvolvido"
 
 #: templates/web/base/admin/bodies/edit-league.html:8
 msgid "Diligency prize league table"
-msgstr ""
+msgstr "Tabela da liga de prêmios de diligência"
 
 #: templates/web/base/admin/users/alerts.html:14
 msgid "Disable"
@@ -1066,6 +1066,7 @@ msgstr "Etiqueta mostrada"
 #: templates/web/base/admin/bodies/open311-form-fields.html:107
 msgid "Do not send email alerts on fetched comments to problem creator"
 msgstr ""
+"Não enviar alertas de e-mail sobre comentários para o criador de problemas"
 
 #. ("%s is the site name")
 #: templates/web/base/report/form/user_loggedout.html:5
@@ -1082,7 +1083,7 @@ msgstr "Não gosta de formulários?"
 
 #: templates/web/base/report/_item.html:27
 msgid "Down one"
-msgstr ""
+msgstr "Descer um"
 
 #. ("JS")
 #: templates/web/base/js/translation_strings.html:77
@@ -1091,7 +1092,7 @@ msgstr "Arraste e solte as fotos aqui ou <u>clique para enviar</u>"
 
 #: templates/web/base/admin/extra-metadata-item.html:70
 msgid "Drop-down list"
-msgstr "Menu Drop-down"
+msgstr "Menu Suspenso"
 
 #: templates/web/base/report/_inspect.html:39
 msgid "Duplicate of"
@@ -1119,7 +1120,7 @@ msgstr ""
 
 #: templates/web/base/report/_item.html:65 templates/web/base/report/inspect/information.html:22
 msgid "Easting/Northing:"
-msgstr ""
+msgstr "Leste/Norte:"
 
 #: templates/web/base/admin/list_updates.html:44 templates/web/base/admin/manifesttheme/index.html:22
 #: templates/web/base/admin/problem_row.html:43 templates/web/base/admin/responsepriorities/index.html:34
@@ -1234,6 +1235,11 @@ msgid ""
 " will suppress error messages about\n"
 "                bad dates in the problems fetched."
 msgstr ""
+"Habilite <strong>Sempre buscar todos os problemas</strong> se você habilitou"
+" a busca de problemas do Open311 acima\n"
+"                e o endereço sempre retornará uma lista de todos os"
+" problemas. Isso suprimirá mensagens de erro sobre\n"
+"                dados ruins nos problemas buscados."
 
 #: templates/web/base/admin/bodies/open311-form-fields.html:143 templates/web/base/admin/bodies/open311-form-fields.html:144
 msgid ""
@@ -1288,7 +1294,7 @@ msgstr "Data Final"
 
 #: templates/web/base/admin/bodies/open311-form-fields.html:21
 msgid "Endpoint"
-msgstr "Ponto Final"
+msgstr "Endereço"
 
 #: perllib/FixMyStreet/Cobrand/Zurich.pm:83
 msgid "Enter a Zürich street name"
@@ -1738,6 +1744,8 @@ msgid ""
 "If this priority is passed to an external service (e.g. Exor/Confirm) enter"
 " the priority code to use with that service here."
 msgstr ""
+"Se esta prioridade é passada a um serviço externo, especifique aqui o código"
+" de prioridade a ser usado neste serviço."
 
 #: templates/web/base/admin/extra-metadata-item.html:100
 msgid ""
@@ -1818,6 +1826,8 @@ msgid ""
 "If you only want this template to be an option for specific categories, pick"
 " them here. By default they will show for all categories."
 msgstr ""
+"Se você deseja que este modelo seja uma opção para categorias específicas,"
+" escolha-os aqui. Por padrão, eles serão exibidos para todas as categorias."
 
 #: templates/web/base/report/new/top_message_none.html:10
 msgid ""
@@ -1842,6 +1852,8 @@ msgid ""
 "If you want to use this template to prefill the update field when changing a"
 " report&rsquo;s state, select the state here."
 msgstr ""
+"Se você deseja usar este modelo para preencher previamente o campo de"
+" atualização ao mudar o estado da denúncia, selecione o estado aqui."
 
 #: templates/web/base/questionnaire/index.html:72
 msgid ""
@@ -1900,7 +1912,7 @@ msgstr "Importar usuários"
 
 #: templates/web/base/admin/flagged.html:39
 msgid "In abuse table?"
-msgstr ""
+msgstr "Na tabela de abuso?"
 
 #: templates/web/base/open311/index.html:80
 msgid ""
@@ -2475,6 +2487,10 @@ msgid ""
 "                  Authorised staff users can be associated with the area in"
 " which they operate."
 msgstr ""
+"Usuários normais (públicos) não devem ser associados a nenhuma <strong>área<"
+"/strong>.\n"
+"                  Os usuários autorizados da equipe podem ser associados à"
+" área na qual operam."
 
 #: templates/web/base/admin/users/form.html:45 templates/web/base/admin/users/form.html:46
 msgid ""
@@ -3167,7 +3183,7 @@ msgstr "Problema % enviado ao órgão %s"
 
 #: templates/web/base/admin/stats/index.html:13 templates/web/base/admin/stats/state.html:12 templates/web/zurich/admin/index.html:9
 msgid "Problem breakdown by state"
-msgstr ""
+msgstr "Problemas separados por estado"
 
 #: perllib/FixMyStreet/App/Controller/Admin.pm:244
 msgid "Problem marked as open."
@@ -3616,7 +3632,7 @@ msgstr "Reenviar denúncia"
 
 #: templates/web/base/auth/create.html:72
 msgid "Reset"
-msgstr ""
+msgstr "Redefinir"
 
 #: templates/web/base/admin/responsepriorities/index.html:1
 msgid "Response Priorities"
@@ -3778,7 +3794,7 @@ msgstr "Selecionar uma área"
 
 #: templates/web/base/admin/responsepriorities/edit.html:19
 msgid "Select if this is the default priority"
-msgstr ""
+msgstr "Selecione se esta é a prioridade padrão"
 
 #: templates/web/base/reports/_ward-list.html:7
 msgid "Select multiple wards to view only reports within those wards."
@@ -3844,25 +3860,25 @@ msgstr "Compartilhar"
 
 #: templates/web/base/admin/manifesttheme/index.html:8
 msgid "Short Name"
-msgstr ""
+msgstr "Abreviação"
 
 #: templates/web/base/main_nav_items.html:10 templates/web/base/report/_main.html:149 templates/web/base/report/_main.html:27
 #: templates/web/base/report/_main.html:35
 msgid "Shortlist"
-msgstr ""
+msgstr "Lista de atalhos"
 
 #: templates/web/base/reports/body.html:39
 msgid "Shortlist all visible"
-msgstr ""
+msgstr "Lista toda visível"
 
 #: templates/web/base/report/_main.html:147 templates/web/base/report/_main.html:26 templates/web/base/report/_main.html:31
 #: templates/web/base/reports/_list-filter-status.html:24
 msgid "Shortlisted"
-msgstr ""
+msgstr "Favoritado"
 
 #: templates/web/base/report/_item.html:15 templates/web/base/report/_main.html:157
 msgid "Shortlisted by %s"
-msgstr ""
+msgstr "Listado por %s"
 
 #: templates/web/base/report/update.html:23
 msgid "Show Photo?"
@@ -3947,6 +3963,9 @@ msgid ""
 " reports are being\n"
 "          sent from your FixMyStreet installation."
 msgstr ""
+"Alguns caminhos exigem <strong>API key</strong> para indicar que a denúncia"
+" está sendo\n"
+"          enviada da instalação do AjeitaMinhaRua"
 
 #: templates/web/base/alert/index.html:22
 msgid "Some photos of recent reports"
@@ -4011,7 +4030,7 @@ msgstr ""
 
 #: templates/web/base/offline/fallback.html:6
 msgid "Sorry, we don’t have a good enough connection to fetch that page."
-msgstr ""
+msgstr "Desculpe, não conseguimos abrir a página por problema de conexão."
 
 #: perllib/FixMyStreet/App/Controller/Root.pm:129
 msgid "Sorry, you don't have permission to do that."
@@ -4341,11 +4360,11 @@ msgstr "Esse usuário foi tornado anônimo em todas as denúncias e atualizaçõ
 
 #: perllib/FixMyStreet/App/Controller/Admin/Users.pm:637
 msgid "That user’s personal details have been removed."
-msgstr ""
+msgstr "Os detalhes pessoais deste usuário foram removidos."
 
 #: perllib/FixMyStreet/App/Controller/Admin/Users.pm:602
 msgid "That user’s reports and updates have been hidden."
-msgstr ""
+msgstr "As denúncias e atualizações desse usuário foram escondidos."
 
 #: templates/web/base/admin/manifesttheme/form.html:20
 msgid ""
@@ -4362,6 +4381,9 @@ msgid ""
 " connect to \n"
 "            when sending reports to this body."
 msgstr ""
+"O <strong>endereço</strong> é o caminho do serviço no qual o AjeitaMinhaRua"
+" vai se conectar\n"
+"            para enviar denúncias a este órgão."
 
 #: templates/web/base/admin/manifesttheme/form.html:49
 msgid ""
@@ -4370,6 +4392,9 @@ msgid ""
 "strong>, with <strong>512x512</strong>px and <strong>192x192</strong>px being"
 " the most common sizes."
 msgstr ""
+"Os <strong>ícones</strong> são usados quando a aplicação é instalada na tela"
+" inicial do usuário. Os ícones precisam ser <strong>quadrados</"
+"strong>, e medirem <strong>512x512</strong>px e <strong>192x192</strong>px."
 
 #: templates/web/base/admin/bodies/open311-form-fields.html:27 templates/web/base/admin/bodies/open311-form-fields.html:28
 msgid ""
@@ -4385,6 +4410,9 @@ msgid ""
 " application as it is usually displayed to the user (e.g., "
 "amongst a list of other applications, or as a label for an icon)."
 msgstr ""
+"O <strong>name</strong> é uma cadeia de caracteres que representa o nome da"
+" aplicação  web como é mostrada para o usuário (ex., "
+"numa lista de  aplicativos, ou como um rótulo para um ícone)."
 
 #: templates/web/base/admin/bodies/contact-form.html:76 templates/web/base/admin/bodies/contact-form.html:77
 #: templates/web/base/admin/bodies/form.html:101 templates/web/base/admin/bodies/form.html:102
@@ -4394,6 +4422,10 @@ msgid ""
 "           If you leave this blank, <strong>send method defaults to email<"
 "/strong>."
 msgstr ""
+"O <strong>método de envio</strong> determina como os problemas denunciados"
+" serão enviados ao órgão.\n"
+"           Se você deixar este campo em branco, <strong>o método padrão de"
+" envio será email</strong>."
 
 #: templates/web/base/admin/manifesttheme/form.html:10
 msgid ""
@@ -4464,6 +4496,9 @@ msgid ""
 " service_request_id, description, lat, long, media_url, status, "
 "requested_datetime, updated_datetime, service_code and service_name."
 msgstr ""
+"Os seguintes atributos v2 Open311 são retornados em cada requisição: "
+" service_request_id, description, lat, long, media_url, status, "
+"requested_datetime, updated_datetime, service_code and service_name."
 
 #: perllib/FixMyStreet/Geocode/OSM.pm:153
 msgid ""
@@ -4472,8 +4507,9 @@ msgid ""
 "to a road without a name registered in OpenStreetMap."
 msgstr ""
 "As seguintes informações sobre a estrada mais próxima podem ser imprecisas ou"
-" irrelevantes, em caso do problema se encontrar perto de várias estradas ou"
-" perto de uma estrada sem um nome registrado no OpenStreetMap."
+" irrelevantes, em caso do problema se encontrar perto de "
+"várias estradas ou perto de uma estrada sem um nome registrado no"
+" OpenStreetMap."
 
 #: db/alert_types.pl:19 db/alert_types.pl:23 db/alert_types.pl:27 db/alert_types.pl:31
 msgid "The latest local problems reported by users"
@@ -4531,6 +4567,8 @@ msgid ""
 "The role's <strong>name</strong> is used to refer to this group of"
 " permissions elsewhere in the admin."
 msgstr ""
+"O <strong>nome</strong> da função name é usado para se referir a este grupo"
+" de permissões, em qualquer lugar do painel administrativo."
 
 #: templates/web/base/admin/users/import.html:68
 msgid ""
@@ -4545,6 +4583,8 @@ msgid ""
 "The user could not locate the problem on a map, but to see the area around"
 " the location they entered"
 msgstr ""
+"O usuário não conseguiu localizar o problema no mapa, apenas a área ao redor "
+" da localização que ele especificou"
 
 #: perllib/FixMyStreet/App/Controller/Admin/Users.pm:627
 msgid "The user has been sent a login email"
@@ -4556,6 +4596,9 @@ msgid ""
 " not been marked <em>anonymous</em>.\n"
 "                Names are not necessarily unique."
 msgstr ""
+"O <strong>nome</strong> do usuário é mostrado publicamente em denúncias que"
+" não foram marcadass <em>anônimas</em>.\n"
+"                Nomes não são necessariamente únicos."
 
 #: templates/web/base/admin/manifesttheme/form.html:1
 msgid "Theme"
@@ -4698,6 +4741,7 @@ msgid ""
 "This API implementation is work in progress and not yet stabilized.  It will"
 " change without warnings in the future."
 msgstr ""
+"A implementação da API está em andamento e ainda não se encontra estável. "
 
 #: templates/web/base/admin/bodies/body.html:49
 msgid ""
@@ -4708,6 +4752,12 @@ msgid ""
 "            Currently, users <strong>cannot report problems to this body<"
 "/strong>."
 msgstr ""
+"Este corpo Não cobre nenhuma área. Isto significa que problemas reportados <"
+"em>nesta localização</em> não possuem jurisdição.\n"
+"            Consequentemente, nenhuma destas categorias aparecerão no menu"
+" suspenso de categoria quando usuários denunciarem problemas.\n"
+"            Atualmente, usuários <strong>não podem denunciar problemas para"
+" este órgão</strong>."
 
 #: templates/web/base/admin/bodies/body.html:59
 msgid ""
@@ -4727,7 +4777,7 @@ msgid ""
 msgstr ""
 "Este órgão somente receberá denúncias de problemas que estejam localizados na"
 " <strong>área de abrangência</strong>.\n"
-"           Um órgão não receberá nenhum relatório a menos que cubra pelo"
+"           Um órgão não receberá nenhuma denúncia a menos que cubra pelo"
 " menos uma área."
 
 #: perllib/FixMyStreet/Queue/Item/Report.pm:196
@@ -4987,11 +5037,11 @@ msgstr "ID de atualização não encontrado"
 
 #: templates/web/base/reports/_list-filter-status.html:25
 msgid "Unshortlisted"
-msgstr ""
+msgstr "Desfavoritado"
 
 #: templates/web/base/report/_item.html:26
 msgid "Up one"
-msgstr ""
+msgstr "Subir um"
 
 #: templates/web/base/admin/states/index.html:76 templates/web/base/admin/users/alerts.html:58
 #: templates/web/base/report/update/form_update.html:31
@@ -5020,7 +5070,7 @@ msgstr "Atualizar órgão"
 
 #: templates/web/base/admin/stats/state.html:21
 msgid "Update breakdown by state"
-msgstr ""
+msgstr "Atualizações separados por estado"
 
 #: db/alert_types.pl:7
 msgid "Update by {{name}}"
@@ -5087,7 +5137,7 @@ msgstr "Notas de uso"
 
 #: templates/web/base/admin/bodies/open311-form-fields.html:137
 msgid "Use Open311 problem fetching"
-msgstr ""
+msgstr "Use o buscador de problemas Open311"
 
 #: templates/web/base/admin/bodies/open311-form-fields.html:76
 msgid "Use Open311 update-sending extension"
@@ -5102,7 +5152,7 @@ msgstr ""
 
 #: templates/web/base/admin/bodies/open311-form-fields.html:90
 msgid "User ID to attribute fetched comments to"
-msgstr ""
+msgstr "ID do usuário para atribuir comentários buscados a"
 
 #: templates/web/base/admin/users/import.html:1
 msgid "User Import"
@@ -5160,8 +5210,8 @@ msgid ""
 "manual permission selection."
 msgstr ""
 "Os usuários podem ser atribuídos uma ou mais funções, para dar-lhes todas as"
-" permissões dessas funções. Selecionar uma função ou funções desativará a"
-" seleção de permissões manuais."
+" permissões dessas funções. Selecionar uma função ou "
+"funções desativará a seleção de permissões manuais."
 
 #: templates/web/base/admin/users/form.html:156
 msgid ""
@@ -5284,6 +5334,8 @@ msgid ""
 "We&rsquo;re sorry to hear the problem’s not fixed. Why not try writing to"
 " your local representatives?"
 msgstr ""
+"Sentimos muito em saber que o problema não está resolvido. Por que você não"
+" tenta representantes locais?"
 
 #: templates/web/base/dashboard/index.html:123
 msgid "Website"
@@ -5307,7 +5359,7 @@ msgstr "Editado"
 
 #: templates/web/base/admin/problem_row.html:35
 msgid "When sent"
-msgstr ""
+msgstr "Quando enviado"
 
 #: templates/web/base/alert/_list.html:9
 msgid "Which problems do you want alerts about?"
