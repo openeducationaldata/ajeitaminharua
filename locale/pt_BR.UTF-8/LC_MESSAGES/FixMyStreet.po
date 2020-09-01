@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: matthew@mysociety.org\n"
 "POT-Creation-Date: 2020-05-06 13:37+0100\n"
-"PO-Revision-Date: 2020-08-31 16:51-0300\n"
+"PO-Revision-Date: 2020-09-01 17:04-0300\n"
 "Last-Translator: Kennet Calixto <kennet.emerson@gmail.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
 "Language: pt_BR\n"
@@ -1187,6 +1187,8 @@ msgid ""
 "Enable <strong>Convert location from Easting/Northing</strong> if you've enabled Open311 problem-fetching above\n"
 "                and problems fetching from the endpoint have the location in Easting/Northings and not Latitude/Longitude."
 msgstr ""
+"Habilite <strong>Converter localização de Leste / Norte</strong> se você habilitou a busca de problemas do Open311 acima\n"
+"                e os problemas buscados têm a localização em Leste / Norte e não em Latitude / Longitude."
 
 #: templates/web/base/admin/bodies/open311-form-fields.html:127 templates/web/base/admin/bodies/open311-form-fields.html:128
 msgid ""
@@ -1195,6 +1197,10 @@ msgid ""
 "          For more information, see \n"
 "          <a href='https://www.mysociety.org/2013/02/20/open311-extended/' class='admin-offsite-link'>this article</a>."
 msgstr ""
+"Habilite <strong>a busca de problemas do Open311</strong> se você quiser exibir denúncias criados no\n"
+"          caminho para o FixMyStreet. Se você não tem certeza, você provavelmente não deve habilitar, então deixe isso desmarcado.\n"
+"          Para obter mais informações, consulte \n"
+"          <a href='https://www.mysociety.org/2013/02/20/open311-extended/' class='admin-offsite-link'>este artigo</a>."
 
 #: templates/web/base/admin/bodies/open311-form-fields.html:66 templates/web/base/admin/bodies/open311-form-fields.html:67
 msgid ""
@@ -1203,6 +1209,11 @@ msgid ""
 "          For more information, see \n"
 "          <a href='https://www.mysociety.org/2013/02/20/open311-extended/' class='admin-offsite-link'>this article</a>."
 msgstr ""
+"Habilite o <strong>envio de atualizações do Open311</strong> se o caminho envia e recebe\n"
+"          atualizações para denúncias existentes. Se você não tem certeza, provavelmente não deve habilitar, então deixe isso "
+"desmarcado.\n"
+"          Para obter mais informações, consulte \n"
+"          <a href='https://www.mysociety.org/2013/02/20/open311-extended/' class='admin-offsite-link'>este artigo</a>."
 
 #: templates/web/base/admin/bodies/form.html:121 templates/web/base/admin/bodies/form.html:122
 msgid ""
@@ -1210,6 +1221,9 @@ msgid ""
 "          different endpoint (and send method) from the body's. For example, if reports for some categories of\n"
 "          problem must be emailed, while others can be sent over Open311."
 msgstr ""
+"Habilitar a configuração <strong>pode ser retornado</strong> se um ou mais contatos têm um \n"
+"          caminho diferente (e método de envio) do órgão. Por exemplo, se as denúncias para algumas categorias de\n"
+"          problema deve ser enviado por e-mail, enquanto outros podem ser enviados pelo Open311."
 
 #: templates/web/base/admin/bodies/open311-form-fields.html:54 templates/web/base/admin/bodies/open311-form-fields.html:55
 msgid "Enabling this will suppress the error message that is normally emitted when an update has no description"
@@ -1725,6 +1739,10 @@ msgid ""
 "              its updates. Enable <strong>extended Open311 stauses</strong> if you want to allow extra states to be passed.\n"
 "              Check that your cobrand supports this feature before switching it on."
 msgstr ""
+"Se você habilitou o envio de atualizações do Open311 acima, o Open311 geralmente só aceitará status ABERTO ou FECHADO em \n"
+"              suas atualizações. Habilite <strong>os statuses Open311 estendidos</strong> se você quiser permitir que estados extras "
+"sejam aprovados.\n"
+"              Verifique se sua multimarca suporta esse recurso antes de ligá-lo."
 
 #: templates/web/base/admin/bodies/open311-form-fields.html:100 templates/web/base/admin/bodies/open311-form-fields.html:99
 msgid ""
@@ -3422,7 +3440,7 @@ msgstr "Lugar certo?"
 
 #: perllib/FixMyStreet/Geocode/OSM.pm:161
 msgid "Road operator for this named road (derived from road reference number and type): %s"
-msgstr ""
+msgstr "Operador da estrada para esta estrada nomeada (derivado do número e tipo de referência da estrada): %s"
 
 #: perllib/FixMyStreet/Geocode/OSM.pm:158
 msgid "Road operator for this named road (from OpenStreetMap): %s"
@@ -3562,7 +3580,7 @@ msgstr "Enviar contagem de falhas:"
 
 #: templates/web/base/admin/bodies/open311-form-fields.html:121
 msgid "Send extended Open311 statuses with service request updates"
-msgstr ""
+msgstr "Envie status estendidos do Open311 com atualizações de solicitação de serviço"
 
 #: templates/web/base/admin/users/form.html:25
 msgid "Send login email"
@@ -4099,6 +4117,8 @@ msgid ""
 "The <strong>jurisdiction</strong> is only needed if the endpoint is serving more\n"
 "          than one. If the body is running its own endpoint, you can usually leave this blank."
 msgstr ""
+"A <strong>jurisdição</strong> só é necessária se este caminho está servindo mais\n"
+"          de um. Se o órgão têm seu próprio caminho, você pode deixar isto em branco."
 
 #: templates/web/base/admin/manifesttheme/form.html:5
 msgid ""
@@ -4142,6 +4162,8 @@ msgid ""
 "The Open311 v2 attribute agency_responsible is used to list the administrations that received the problem report, which is not quite "
 "the way the attribute is defined in the Open311 v2 specification."
 msgstr ""
+"O atributo Open311 v2 agency_responsible é usado para listar as administrações que receberam a denúncia do problema, que não é bem a "
+"maneira como o atributo é definido na especificação Open311 v2."
 
 #: templates/web/base/admin/bodies/form.html:17 templates/web/base/admin/bodies/form.html:18
 msgid ""
@@ -4171,7 +4193,7 @@ msgstr ""
 
 #: templates/web/base/admin/bodies/edit-league.html:3 templates/web/base/admin/bodies/edit-league.html:4
 msgid "The diligency prize league table shows editors' activity (who's been editing the most records)."
-msgstr ""
+msgstr "A tabela da liga do prêmio de diligência mostra a atividade dos editores (quem tem editado a maioria dos registros)."
 
 #: perllib/FixMyStreet/App/Controller/Dashboard.pm:45 perllib/FixMyStreet/App/Controller/Reports.pm:58
 msgid "The error was: %s"
