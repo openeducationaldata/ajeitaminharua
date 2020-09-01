@@ -5,8 +5,9 @@ AjeitaMinhaRua é uma plataforma de código aberto com a base de código modific
 ## Progresso
 No momento, o projeto se encontra nas fases finais de tradução. Você pode contribuir com a tradução do repositório base acessando o transifex ou abrindo um Pull Request para este repositório, atualizando o arquivo de tradução.
 * ~Ajustes de glossário para tradução~
-* **Tradução**
-* Revisão
+* ~Tradução~
+* **Script de Inicialização**
+* **Revisão**
 * Publicação do .po traduzido
 
 ## Instalação
