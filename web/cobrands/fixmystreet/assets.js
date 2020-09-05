@@ -24,12 +24,13 @@ OpenLayers.Layer.VectorAsset = OpenLayers.Class(OpenLayers.Layer.Vector, {
         $(fixmystreet).on('assets:unselected', this.checkSelected.bind(this));
         $(fixmystreet).on('report_new:category_change', this.changeCategory.bind(this));
         $(fixmystreet).on('report_new:category_change', this.update_layer_visibility.bind(this));
+        $(fixmystreet).on('inspect_form:asset_change', this.update_layer_visibility.bind(this));
     },
 
-    relevant: function() {
-      var category = $('select#form_category').val(),
-          group = $('select#category_group').val(),
-          layer = this.fixmystreet,
+    relevant: function(category, group) {
+      category = category || $('#inspect_form_category').val() || $('#form_category').val();
+      group = group || $('#inspect_category_group').val() || $('#category_group').val();
+      var layer = this.fixmystreet,
           relevant;
       if (layer.relevant) {
           relevant = layer.relevant({category: category, group: group});
@@ -106,7 +107,13 @@ OpenLayers.Layer.VectorAsset = OpenLayers.Class(OpenLayers.Layer.Vector, {
         if (!this.inRange && this.resolutions) {
             var firstVisibleResolution = this.resolutions[0];
             var zoomLevel = fixmystreet.map.getZoomForResolution(firstVisibleResolution);
-            fixmystreet.map.zoomTo(zoomLevel);
+            if (window.selected_problem_id) {
+                var feature = fixmystreet.maps.get_marker_by_id(window.selected_problem_id);
+                var center = feature.geometry.getBounds().getCenterLonLat();
+                fixmystreet.map.setCenter(center, zoomLevel);
+            } else {
+                fixmystreet.map.zoomTo(zoomLevel);
+            }
         }
     },
 
@@ -119,6 +126,9 @@ OpenLayers.Layer.VectorAsset = OpenLayers.Class(OpenLayers.Layer.Vector, {
         if (!fixmystreet.map) {
             return;
         }
+        if (!this.getVisibility()) {
+          return;
+        }
         var feature = fixmystreet.assets.selectedFeature();
         if (feature) {
             this.setAttributeFields(feature);
@@ -130,13 +140,19 @@ OpenLayers.Layer.VectorAsset = OpenLayers.Class(OpenLayers.Layer.Vector, {
             return;
         }
         // Set the extra fields to the value of the selected feature
+        var $mobile_display = $('#change_asset_mobile').text('');
         $.each(this.fixmystreet.attributes, function(field_name, attribute_name) {
             var $field = $("#form_" + field_name);
+            var $inspect_fields = $('[id^=category_][id$=form_' + field_name + ']');
+            var value;
             if (typeof attribute_name === 'function') {
-                $field.val(attribute_name.apply(feature));
+                value = attribute_name.apply(feature);
             } else {
-                $field.val(feature.attributes[attribute_name]);
+                value = feature.attributes[attribute_name];
             }
+            $field.val(value);
+            $inspect_fields.val(value);
+            $mobile_display.append(field_name + ': ' + value + '<br>');
         });
     },
 
@@ -320,7 +336,6 @@ var fault_popup = null;
  */
 function init_asset_layer(layer, pins_layer) {
     layer.update_layer_visibility();
-    fixmystreet.map.addLayer(layer);
     if (layer.fixmystreet.asset_category || layer.fixmystreet.asset_group) {
         fixmystreet.map.events.register( 'zoomend', layer, check_zoom_message_visibility);
     }
@@ -384,6 +399,7 @@ function asset_selected(e) {
 
     // Keep track of selection in case layer is reloaded or hidden etc.
     selected_feature = feature.clone();
+    selected_feature.layer = feature.layer;
 
     // Hide the normal markers layer to keep things simple, but
     // move the green marker to the point of the click to stop
@@ -404,6 +420,11 @@ function asset_selected(e) {
 }
 
 function asset_unselected(e) {
+    if (selected_feature.layer !== this) {
+        // The selected feature has already changed to something in a different
+        // layer, so we don't want to mess that up by clearing it
+        return;
+    }
     fixmystreet.markers.setVisibility(true);
     selected_feature = null;
     this.clearAttributeFields();
@@ -478,6 +499,8 @@ function _update_message(message, c) {
     }
 }
 
+var lastVisible = 0;
+
 function layer_visibilitychanged() {
     if (this.fixmystreet.road) {
         if (!this.getVisibility()) {
@@ -488,7 +511,7 @@ function layer_visibilitychanged() {
         }
         return;
     } else if (!this.getVisibility()) {
-        asset_unselected.call(this);
+        this.get_select_control().unselectAll();
         this.asset_not_found(); // as trigger won't call on non-visible layers
     }
 
@@ -512,12 +535,13 @@ function layer_visibilitychanged() {
             visible++;
         }
     }
-    if (visible === 2 || visible === 0) {
-        // We're either switching WFS layers (so going 1->2->1 or 1->0->1)
-        // or switching off WFS layer (so going 1->0). Either way, we want
-        // to show the marker again.
+    if (visible === 0 || visible > lastVisible) {
+        // We're either switching WFS layers (so going 1->2->1 or 1->0->1 or
+        // even 1->2->3->2) or switching off WFS layer (so going 1->0).
+        // Whichever way, we want to show the marker again.
         fixmystreet.markers.setVisibility(true);
     }
+    lastVisible = visible;
     if (!this.fixmystreet.non_interactive) {
         this.select_nearest_asset();
     }
@@ -549,15 +573,7 @@ function get_asset_stylemap() {
     return new OpenLayers.StyleMap({
         'default': fixmystreet.assets.style_default,
         'select': fixmystreet.assets.style_default_select,
-        'hover': new OpenLayers.Style({
-            fillColor: "#55BB00",
-            fillOpacity: 0.8,
-            strokeColor: "#000000",
-            strokeOpacity: 1,
-            strokeWidth: 2,
-            pointRadius: 8,
-            cursor: 'pointer'
-        })
+        'hover': fixmystreet.assets.style_default_hover
     });
 }
 
@@ -824,6 +840,16 @@ fixmystreet.assets = {
         pointRadius: 6
     }),
 
+    style_default_hover: new OpenLayers.Style({
+        fillColor: "#55BB00",
+        fillOpacity: 0.8,
+        strokeColor: "#000000",
+        strokeOpacity: 1,
+        strokeWidth: 2,
+        pointRadius: 8,
+        cursor: 'pointer'
+    }),
+
     style_default_select: new OpenLayers.Style({
         externalGraphic: pin_prefix + "pin-spot.png",
         fillColor: "#55BB00",
@@ -857,7 +883,7 @@ fixmystreet.assets = {
         if (!message) {
             message = get_asset_pick_message.call(this);
         }
-        $('.category_meta_message').html(message);
+        update_message_display.call(this, message);
     },
     named_select_action_not_found: function() {
         var message = get_asset_pick_message.call(this);
@@ -874,6 +900,14 @@ fixmystreet.assets = {
         }
 
         options = $.extend(true, {}, default_options, options);
+
+        var cls = construct_layer_class(options);
+        var staff_report_page = ((fixmystreet.page == 'report' || fixmystreet.page == 'reports') && fixmystreet.staff_set_up);
+        if (staff_report_page && cls === OpenLayers.Layer.VectorNearest) {
+            // Only care about asset layers on report page when staff
+            return;
+        }
+
         var asset_layer = this.add_layer(options);
         this.add_controls([asset_layer], options);
         return asset_layer;
@@ -919,8 +953,10 @@ fixmystreet.assets = {
     },
 
     init: function() {
-        if (fixmystreet.page != 'new' && fixmystreet.page != 'around') {
+        var staff_report_page = ((fixmystreet.page == 'report' || fixmystreet.page == 'reports') && fixmystreet.staff_set_up);
+        if (fixmystreet.page != 'new' && fixmystreet.page != 'around' && !staff_report_page) {
             // We only want to show asset markers when making a new report
+            // or if an inspector is editing a report
             return;
         }
 
@@ -943,13 +979,19 @@ fixmystreet.assets = {
             return hide_assets;
         })(fixmystreet.maps.display_around);
 
-        var pins_layer = fixmystreet.map.getLayersByName("Pins")[0];
+        var asset_layer;
         for (var i = 0; i < fixmystreet.assets.layers.length; i++) {
-            var asset_layer = fixmystreet.assets.layers[i];
+            asset_layer = fixmystreet.assets.layers[i];
             var controls = asset_layer.controls || [];
             for (var j = 0; j < controls.length; j++) {
                 fixmystreet.map.addControl(controls[j]);
             }
+            fixmystreet.map.addLayer(asset_layer);
+        }
+
+        var pins_layer = fixmystreet.map.getLayersByName("Pins")[0];
+        for (i = 0; i < fixmystreet.assets.layers.length; i++) {
+            asset_layer = fixmystreet.assets.layers[i];
             init_asset_layer(asset_layer, pins_layer);
         }
     }

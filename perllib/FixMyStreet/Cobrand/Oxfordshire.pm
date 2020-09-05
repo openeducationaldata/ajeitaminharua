@@ -138,6 +138,23 @@ sub open311_config_updates {
     $params->{use_customer_reference} = 1;
 }
 
+sub open311_pre_send {
+    my ($self, $row, $open311) = @_;
+
+    $self->{ox_original_detail} = $row->detail;
+
+    if (my $fid = $row->get_extra_field_value('feature_id')) {
+        my $text = "Asset Id: $fid\n\n" . $row->detail;
+        $row->detail($text);
+    }
+}
+
+sub open311_post_send {
+    my ($self, $row, $h, $contact) = @_;
+
+    $row->detail($self->{ox_original_detail});
+}
+
 sub should_skip_sending_update {
     my ($self, $update ) = @_;
 
@@ -203,13 +220,11 @@ sub available_permissions {
 }
 
 sub dashboard_export_problems_add_columns {
-    my $self = shift;
-    my $c = $self->{c};
+    my ($self, $csv) = @_;
 
-    push @{$c->stash->{csv}->{headers}}, "HIAMS/Exor Ref";
-    push @{$c->stash->{csv}->{columns}}, "external_ref";
+    $csv->add_csv_columns( external_ref => 'HIAMS/Exor Ref' );
 
-    $c->stash->{csv}->{extra_data} = sub {
+    $csv->csv_extra_data(sub {
         my $report = shift;
         # Try and get a HIAMS reference first of all
         my $ref = $report->get_extra_metadata('customer_reference');
@@ -222,7 +237,7 @@ sub dashboard_export_problems_add_columns {
         return {
             external_ref => ( $ref || '' ),
         };
-    };
+    });
 }
 
 1;

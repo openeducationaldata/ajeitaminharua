@@ -41,6 +41,12 @@ create table users (
 );
 CREATE UNIQUE INDEX users_email_verified_unique ON users (email) WHERE email_verified;
 CREATE UNIQUE INDEX users_phone_verified_unique ON users (phone) WHERE phone_verified;
+create index users_fulltext_idx on users USING GIN(
+    to_tsvector(
+        'english',
+        translate(id || ' ' || coalesce(name,'') || ' ' || coalesce(email,'') || ' ' || coalesce(phone,''), '@.', '  ')
+    )
+);
 
 -- Record details of reporting bodies, including open311 configuration details
 create table body (
@@ -246,6 +252,12 @@ create index problem_user_id_idx on problem ( user_id );
 create index problem_external_body_idx on problem(lower(external_body));
 create index problem_radians_latitude_longitude_idx on problem(radians(latitude), radians(longitude));
 create index problem_bodies_str_array_idx on problem USING gin(regexp_split_to_array(bodies_str, ','));
+create index problem_fulltext_idx on problem USING GIN(
+    to_tsvector(
+        'english',
+        translate(id || ' ' || coalesce(external_id,'') || ' ' || coalesce(bodies_str,'') || ' ' || name || ' ' || title || ' ' || detail, '/.', '  ')
+    )
+);
 
 create table questionnaire (
     id serial not null primary key,
@@ -354,6 +366,12 @@ create table comment (
 create index comment_user_id_idx on comment(user_id);
 create index comment_problem_id_idx on comment(problem_id);
 create index comment_problem_id_created_idx on comment(problem_id, created);
+create index comment_fulltext_idx on comment USING GIN(
+    to_tsvector(
+        'english',
+        translate(id || ' ' || problem_id || ' ' || coalesce(name,'') || ' ' || text, '/.', '  ')
+    )
+);
 
 -- Tokens for confirmations
 create table token (

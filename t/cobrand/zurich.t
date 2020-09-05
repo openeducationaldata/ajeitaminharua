@@ -14,6 +14,9 @@ use FixMyStreet::Script::Reports;
 use FixMyStreet::TestMech;
 my $mech = FixMyStreet::TestMech->new;
 
+FixMyStreet::App->log->disable('info');
+END { FixMyStreet::App->log->enable('info'); }
+
 # Check that you have the required locale installed - the following
 # should return a line with de_CH.utf8 in. If not install that locale.
 #
@@ -98,7 +101,7 @@ my $superuser;
 subtest "set up superuser" => sub {
     $superuser = $mech->log_in_ok( 'super@example.org' );
     # a user from body $zurich is a superuser, as $zurich has no parent id!
-    $superuser->update({ from_body => $zurich->id });
+    $superuser->update({ name => 'Superuser', from_body => $zurich->id });
     $EXISTING_REPORT_COUNT = get_export_rows_count($mech);
     $mech->log_out_ok;
 };
@@ -747,29 +750,74 @@ subtest "superuser and dm can see stats" => sub {
     $user = $mech->log_in_ok( 'dm1@example.org' );
     $mech->get( '/admin/stats' );
     is $mech->res->code, 200, "dm can now also see stats page";
-    $mech->log_out_ok;
 };
 
 subtest "only superuser can edit bodies" => sub {
-    $user = $mech->log_in_ok( 'dm1@example.org' );
     $mech->get( '/admin/body/' . $zurich->id );
     is $mech->res->code, 403, "only superuser should be able to edit bodies";
-    $mech->log_out_ok;
 };
 
 subtest "only superuser can see 'Add body' form" => sub {
-    $user = $mech->log_in_ok( 'dm1@example.org' );
     $mech->get_ok( '/admin/bodies' );
     $mech->content_contains('External Body');
     $mech->content_lacks( '<form method="post" action="bodies"' );
-    $mech->log_out_ok;
 };
 
 subtest "phone number is mandatory" => sub {
-    $user = $mech->log_in_ok( 'dm1@example.org' );
     $mech->get_ok( '/report/new?lat=47.381817&lon=8.529156' );
     $mech->submit_form( with_fields => { phone => "" } );
     $mech->content_contains( 'Diese Information wird benötigt' );
+};
+
+my $internal;
+subtest 'test flagged users make internal reports' => sub {
+    $user->update({ flagged => 1 });
+    $mech->submit_form( with_fields => { phone => "01234", category => 'Cat1', detail => 'Details' } );
+    $internal = FixMyStreet::DB->resultset('Problem')->search(undef, { order_by => { -desc => 'id' }, rows => 1 })->single;
+    is $internal->non_public, 1;
+    $mech->clear_emails_ok;
+};
+
+subtest 'internal report admin display' => sub {
+    $mech->get_ok('/admin/summary');
+    $mech->content_lacks('href="report_edit/' . $internal->id);
+    $mech->get_ok('/admin/summary?internal=1');
+    $mech->content_contains('href="report_edit/' . $internal->id);
+};
+
+subtest 'test no email sent if closed' => sub {
+    $internal->state('feedback pending');
+    $internal->set_extra_metadata('email_confirmed' => 1);
+    $internal->update;
+
+    $mech->get_ok( '/admin/report_edit/' . $internal->id );
+    $mech->submit_form_ok( {
+        button => 'publish_response',
+        with_fields => {
+            status_update => 'Testing no email sent',
+        } });
+
+    $internal->discard_changes;
+    is $internal->state, 'fixed - council';
+    $mech->email_count_is(0);
+};
+
+subtest 'SDM closing internal report' => sub {
+    $mech->log_in_ok('sdm1@example.org');
+    $internal->update({ bodies_str => $subdivision->id, state => 'confirmed' });
+    $mech->get_ok('/admin/report_edit/' . $internal->id);
+    $mech->submit_form_ok( { form_number => 2, button => 'no_more_updates' } );
+    $internal->discard_changes;
+    is $internal->state, 'fixed - council', 'State updated';
+};
+
+subtest 'remove internal flag' => sub {
+    $internal->update({ bodies_str => $subdivision->id, state => 'confirmed' });
+    $mech->get_ok('/admin/report_edit/' . $internal->id);
+    $mech->submit_form_ok( { form_number => 2, button => 'stop_internal' } );
+    $internal->discard_changes;
+    is $internal->non_public, 0;
+    $internal->delete;
     $mech->log_out_ok;
 };
 
@@ -995,6 +1043,15 @@ $mech->log_out_ok;
 subtest 'users at the top level can be edited' => sub {
     $mech->log_in_ok( $superuser->email );
     $mech->get_ok('/admin/users/' . $superuser->id );
+    $mech->content_contains('name="flagged">');
+    $mech->submit_form_ok({ with_fields => { flagged => 1 } });
+    $superuser->discard_changes;
+    is $superuser->flagged, 1, 'Marked as flagged';
+    $mech->get_ok('/admin/users/' . $superuser->id );
+    $mech->content_contains('name="flagged" checked');
+    $mech->submit_form_ok({ with_fields => { flagged => 0 } });
+    $superuser->discard_changes;
+    is $superuser->flagged, 0, 'Unmarked';
 };
 
 subtest 'A visit to /reports is okay' => sub {

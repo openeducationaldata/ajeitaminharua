@@ -50,6 +50,8 @@ sub index : Path {
 
     return if $c->cobrand->call_hook(report_search_query => $query, $p_page, $u_page, $order);
 
+    my $problems = $c->cobrand->problems;
+
     if (my $search = $c->get_param('search')) {
         $search = $self->trim($search);
 
@@ -61,9 +63,6 @@ sub index : Path {
         }
 
         $c->stash->{searched} = $search;
-
-        my $search_n = 0;
-        $search_n = int($search) if $search =~ /^\d+$/;
 
         my $like_search = "%$search%";
 
@@ -92,20 +91,13 @@ sub index : Path {
                 'me.external_id' => { like => "%$1%" }
             ];
         } else {
-            $query->{'-or'} = [
-                'me.id' => $search_n,
-                'user.email' => { ilike => $like_search },
-                'user.phone' => { ilike => $like_search },
-                'me.external_id' => { ilike => $like_search },
-                'me.name' => { ilike => $like_search },
-                'me.title' => { ilike => $like_search },
-                detail => { ilike => $like_search },
-                bodies_str => { like => $like_search },
-                cobrand_data => { like => $like_search },
-            ];
+            $problems = $problems->search_text($search);
+            # The below is added so that PostgreSQL does not try and use other indexes
+            # besides the full text search. It should have no impact on results shown.
+            $order = [ $order, { -desc => "me.id" }, { -desc => "me.created" } ];
         }
 
-        my $problems = $c->cobrand->problems->search(
+        $problems = $problems->search(
             $query,
             {
                 join => 'user',
@@ -119,6 +111,8 @@ sub index : Path {
         $c->stash->{problems} = [ $problems->all ];
         $c->stash->{problems_pager} = $problems->pager;
 
+        my $updates = $c->cobrand->updates;
+        $order = { -desc => 'me.id' };
         if ($valid_email) {
             $query = [
                 'user.email' => { ilike => $like_search },
@@ -133,30 +127,25 @@ sub index : Path {
                 'me.problem_id' => int($1),
             ];
         } elsif ($search =~ /^area:(\d+)$/) {
-            $query = [];
+            $query = 0;
         } else {
-            $query = [
-                'me.id' => $search_n,
-                'problem.id' => $search_n,
-                'user.email' => { ilike => $like_search },
-                'user.phone' => { ilike => $like_search },
-                'me.name' => { ilike => $like_search },
-                text => { ilike => $like_search },
-                'me.cobrand_data' => { ilike => $like_search },
-            ];
+            $updates = $updates->search_text($search);
+            $order = [ $order, { -desc => "me.created" } ];
+            $query = 1;
         }
 
-        if (@$query) {
-            my $updates = $c->cobrand->updates->search(
-                {
-                    -or => $query,
-                },
+        $query = { -or => $query } if ref $query;
+
+        if ($query) {
+            $query = undef unless ref $query;
+            $updates = $updates->search(
+                $query,
                 {
                     '+columns' => ['user.email'],
                     join => 'user',
                     prefetch => [qw/problem/],
                     rows => 50,
-                    order_by => { -desc => 'me.id' }
+                    order_by => $order,
                 }
             )->page( $u_page );
             $c->stash->{updates} = [ $updates->all ];
@@ -165,7 +154,7 @@ sub index : Path {
 
     } else {
 
-        my $problems = $c->cobrand->problems->search(
+        $problems = $problems->search(
             $query,
             {
                 '+columns' => ['user.email'],

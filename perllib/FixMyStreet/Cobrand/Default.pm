@@ -1072,7 +1072,7 @@ sub can_support_problems { return 0; }
 =item default_map_zoom
 
 default_map_zoom is used when displaying a map overriding the
-default of max-4 or max-3 depending on population density.
+default that depends on population density.
 
 =cut
 
@@ -1248,15 +1248,13 @@ sub get_geocoder {
 sub problem_as_hashref {
     my $self = shift;
     my $problem = shift;
-    my $ctx = shift;
 
-    return $problem->as_hashref( $ctx );
+    return $problem->as_hashref;
 }
 
 sub updates_as_hashref {
     my $self = shift;
     my $problem = shift;
-    my $ctx = shift;
 
     return {};
 }

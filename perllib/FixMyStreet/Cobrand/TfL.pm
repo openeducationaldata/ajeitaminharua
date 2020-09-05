@@ -242,41 +242,31 @@ sub available_permissions {
 }
 
 sub dashboard_export_problems_add_columns {
-    my $self = shift;
-    my $c = $self->{c};
+    my ($self, $csv) = @_;
 
-    $c->stash->{csv}->{headers} = [
-        map { $_ eq 'Ward' ? 'Borough' : $_ } @{ $c->stash->{csv}->{headers} },
-        "Agent responsible",
-        "Safety critical",
-        "Delivered to",
-        "Closure email at",
-        "Reassigned at",
-        "Reassigned by",
-    ];
+    $csv->modify_csv_header( Ward => 'Borough' );
 
-    $c->stash->{csv}->{columns} = [
-        @{ $c->stash->{csv}->{columns} },
-        "agent_responsible",
-        "safety_critical",
-        "delivered_to",
-        "closure_email_at",
-        "reassigned_at",
-        "reassigned_by",
-    ];
+    $csv->add_csv_columns(
+        agent_responsible => "Agent responsible",
+        safety_critical => "Safety critical",
+        delivered_to => "Delivered to",
+        closure_email_at => "Closure email at",
+        reassigned_at => "Reassigned at",
+        reassigned_by => "Reassigned by",
+    );
 
-    if ($c->stash->{category}) {
-        my ($contact) = grep { $_->category eq $c->stash->{category} } @{$c->stash->{contacts}};
+    if ($csv->category) {
+        my @contacts = $csv->body->contacts->search(undef, { order_by => [ 'category' ] } )->all;
+        my ($contact) = grep { $_->category eq $csv->category } @contacts;
         if ($contact) {
             foreach (@{$contact->get_metadata_for_storage}) {
                 next if $_->{code} eq 'safety_critical';
-                push @{$c->stash->{csv}->{columns}}, "extra.$_->{code}";
-                push @{$c->stash->{csv}->{headers}}, $_->{description};
+                $csv->add_csv_columns( "extra.$_->{code}" => $_->{description} );
             }
         }
     }
 
-    $c->stash->{csv}->{extra_data} = sub {
+    $csv->csv_extra_data(sub {
         my $report = shift;
 
         my $agent = $report->shortlisted_user;
@@ -317,7 +307,7 @@ sub dashboard_export_problems_add_columns {
             $fields->{"extra.$_->{name}"} = $_->{value};
         }
         return $fields;
-    };
+    });
 }
 
 sub must_have_2fa {

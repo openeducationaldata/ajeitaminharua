@@ -10,6 +10,7 @@ use DateTime::Format::Pg;
 use Try::Tiny;
 
 use FixMyStreet::Geocode::Zurich;
+use FixMyStreet::WorkingDays;
 
 use strict;
 use warnings;
@@ -131,9 +132,8 @@ sub problem_has_user_response {
 sub problem_as_hashref {
     my $self = shift;
     my $problem = shift;
-    my $ctx = shift;
 
-    my $hashref = $problem->as_hashref( $ctx );
+    my $hashref = $problem->as_hashref;
 
     if ( $problem->state eq 'submitted' ) {
         for my $var ( qw( photo is_fixed meta ) ) {
@@ -171,7 +171,6 @@ sub problem_as_hashref {
 sub updates_as_hashref {
     my $self = shift;
     my $problem = shift;
-    my $ctx = shift;
 
     my $hashref = {};
 
@@ -182,7 +181,7 @@ sub updates_as_hashref {
             $hashref->{details} = FixMyStreet::App::View::Web::add_links(
                 $problem->get_extra_metadata('public_response') || '' );
         } else {
-            $hashref->{details} = sprintf( _('Assigned to %s'), $problem->body($ctx)->name );
+            $hashref->{details} = sprintf( _('Assigned to %s'), $problem->body->name );
         }
     }
 
@@ -223,7 +222,7 @@ sub get_body_sender {
 
 # Report overdue functions
 
-my %public_holidays = map { $_ => 1 } (
+my @public_holidays = (
     # New Year's Day, Saint Berchtold, Good Friday, Easter Monday,
     # Sechseläuten, Labour Day, Ascension Day, Whit Monday,
     # Swiss National Holiday, Knabenschiessen, Christmas, St Stephen's Day
@@ -249,53 +248,23 @@ my %public_holidays = map { $_ => 1 } (
     '2021-09-13',
 );
 
-sub is_public_holiday {
-    my $dt = shift;
-    return $public_holidays{$dt->ymd};
-}
-
-sub is_weekend {
-    my $dt = shift;
-    return $dt->dow > 5;
-}
-
-sub add_days {
-    my ( $dt, $days ) = @_;
-    $dt = $dt->clone;
-    while ( $days > 0 ) {
-        $dt->add ( days => 1 );
-        next if is_public_holiday($dt) or is_weekend($dt);
-        $days--;
-    }
-    return $dt;
-}
-
-sub sub_days {
-    my ( $dt, $days ) = @_;
-    $dt = $dt->clone;
-    while ( $days > 0 ) {
-        $dt->subtract ( days => 1 );
-        next if is_public_holiday($dt) or is_weekend($dt);
-        $days--;
-    }
-    return $dt;
-}
-
 sub overdue {
     my ( $self, $problem ) = @_;
 
     my $w = $problem->created;
     return 0 unless $w;
 
+    my $wd = FixMyStreet::WorkingDays->new( public_holidays => \@public_holidays );
+
     # call with previous state
     if ( $problem->state eq 'submitted' ) {
         # One working day
-        $w = add_days( $w, 1 );
+        $w = $wd->add_days( $w, 1 );
         return $w < DateTime->now() ? 1 : 0;
     } elsif ( $problem->state eq 'confirmed' || $problem->state eq 'in progress' || $problem->state eq 'feedback pending' ) {
         # States which affect the subdiv_overdue statistic.  TODO: this may no longer be required
         # Six working days from creation
-        $w = add_days( $w, 6 );
+        $w = $wd->add_days( $w, 6 );
         return $w < DateTime->now() ? 1 : 0;
 
     # call with new state
@@ -303,7 +272,7 @@ sub overdue {
         # States which affect the closed_overdue statistic
         # Five working days from moderation (so 6 from creation)
 
-        $w = add_days( $w, 6 );
+        $w = $wd->add_days( $w, 6 );
         return $w < DateTime->now() ? 1 : 0;
     }
 }
@@ -454,10 +423,21 @@ sub admin_type {
     return $type;
 }
 
+sub _admin_index_order {
+    my $self = shift;
+    my $c = $self->{c};
+    my $order = $c->get_param('o') || 'created';
+    my $dir = defined $c->get_param('d') ? $c->get_param('d') : 1;
+    $c->stash->{order} = $order;
+    $c->stash->{dir} = $dir;
+    return $dir ? { -desc => $order } : $order;
+}
+
 sub admin {
     my $self = shift;
     my $c = $self->{c};
     my $type = $c->stash->{admin_type};
+    my $internal = $c->get_param('internal');
 
     if ($type eq 'dm') {
         $c->stash->{template} = 'admin/index-dm.html';
@@ -466,22 +446,20 @@ sub admin {
         my @children = map { $_->id } $body->bodies->all;
         my @all = (@children, $body->id);
 
-        my $order = $c->get_param('o') || 'created';
-        my $dir = defined $c->get_param('d') ? $c->get_param('d') : 1;
-        $c->stash->{order} = $order;
-        $c->stash->{dir} = $dir;
-        $order = { -desc => $order } if $dir;
+        my $order = $self->_admin_index_order;
 
-        # XXX No multiples or missing bodies
+        # No multiples or missing bodies
         $c->stash->{submitted} = $c->cobrand->problems->search({
             state => [ 'submitted', 'confirmed' ],
             bodies_str => $c->stash->{body}->id,
+            non_public => $internal ? 1 : 0,
         }, {
             order_by => $order,
         });
         $c->stash->{approval} = $c->cobrand->problems->search({
             state => 'feedback pending',
             bodies_str => $c->stash->{body}->id,
+            non_public => $internal ? 1 : 0,
         }, {
             order_by => $order,
         });
@@ -490,6 +468,7 @@ sub admin {
         $c->stash->{other} = $c->cobrand->problems->search({
             state => { -not_in => [ 'submitted', 'confirmed', 'feedback pending' ] },
             bodies_str => \@all,
+            non_public => $internal ? 1 : 0,
         }, {
             order_by => $order,
         })->page( $page );
@@ -499,23 +478,20 @@ sub admin {
         $c->stash->{template} = 'admin/index-sdm.html';
 
         my $body = $c->stash->{body};
+        my $order = $self->_admin_index_order;
 
-        my $order = $c->get_param('o') || 'created';
-        my $dir = defined $c->get_param('d') ? $c->get_param('d') : 1;
-        $c->stash->{order} = $order;
-        $c->stash->{dir} = $dir;
-        $order = { -desc => $order } if $dir;
-
-        # XXX No multiples or missing bodies
+        # No multiples or missing bodies
         $c->stash->{reports_new} = $c->cobrand->problems->search( {
             state => 'in progress',
             bodies_str => $body->id,
+            non_public => $internal ? 1 : 0,
         }, {
             order_by => $order
         } );
         $c->stash->{reports_unpublished} = $c->cobrand->problems->search( {
             state => 'feedback pending',
             bodies_str => $body->parent->id,
+            non_public => $internal ? 1 : 0,
         }, {
             order_by => $order
         } );
@@ -524,6 +500,7 @@ sub admin {
         $c->stash->{reports_published} = $c->cobrand->problems->search( {
             state => 'fixed - council',
             bodies_str => $body->parent->id,
+            non_public => $internal ? 1 : 0,
         }, {
             order_by => $order
         } )->page( $page );
@@ -542,6 +519,18 @@ sub category_options {
     } } @categories;
     @categories = sort { $a->{category_display} cmp $b->{category_display} } @categories;
     $c->stash->{category_options} = \@categories;
+}
+
+sub report_remove_internal_flag {
+    my $self = shift;
+    my $c = $self->{c};
+    my $problem = $c->stash->{problem};
+    $c->forward('/auth/check_csrf_token');
+    $problem->non_public(0);
+    $problem->update;
+    $c->forward('/admin/log_edit', [ $problem->id, 'problem', 'Intern Flag entfernt' ]);
+    # Make sure the problem's time_spent is updated
+    $self->update_admin_log($c, $problem);
 }
 
 sub admin_report_edit {
@@ -623,6 +612,10 @@ sub admin_report_edit {
         }
     }
 
+    if ( ($type eq 'super' || $type eq 'dm') && $c->get_param('stop_internal') ) {
+        $self->report_remove_internal_flag;
+        return $self->admin_report_edit_done;
+    }
 
     # Problem updates upon submission
     if ( ($type eq 'super' || $type eq 'dm') && $c->get_param('submit') ) {
@@ -863,18 +856,12 @@ sub admin_report_edit {
             $c->go('index');
         }
 
-        $c->stash->{updates} = [ $c->model('DB::Comment')
-          ->search( { problem_id => $problem->id }, { order_by => 'created' } )
-          ->all ];
-
-        $self->stash_states($problem);
-        return 1;
+        return $self->admin_report_edit_done;
     }
 
     if ($type eq 'sdm') {
 
-        my $editable = $type eq 'sdm' && $body->id eq $problem->bodies_str;
-        $c->stash->{sdm_disabled} = $editable ? '' : 'disabled';
+        my $editable = $body->id eq $problem->bodies_str;
 
         # Has cut-down edit template for adding update and sending back up only
         $c->stash->{template} = 'admin/report_edit-sdm.html';
@@ -905,6 +892,8 @@ sub admin_report_edit {
             # Make sure the problem's time_spent is updated
             $self->update_admin_log($c, $problem);
             $c->res->redirect( '/admin/summary' );
+        } elsif ($editable && $c->get_param('stop_internal')) {
+            $self->report_remove_internal_flag;
         } elsif ($editable && $c->get_param('submit')) {
             $c->forward('/auth/check_csrf_token');
 
@@ -936,28 +925,44 @@ sub admin_report_edit {
 
             # If they clicked the no more updates button, we're done.
             if ($c->get_param('no_more_updates')) {
-                $problem->set_extra_metadata( subdiv_overdue => $self->overdue( $problem ) );
-                $problem->bodies_str( $body->parent->id );
-                $problem->whensent( undef );
-                $self->set_problem_state($c, $problem, 'feedback pending');
+                if ($problem->non_public) {
+                    $problem->bodies_str( $body->parent->id );
+                    $self->set_problem_state($c, $problem, 'fixed - council');
+                } else {
+                    $problem->set_extra_metadata( subdiv_overdue => $self->overdue( $problem ) );
+                    $problem->bodies_str( $body->parent->id );
+                    $problem->whensent( undef );
+                    $self->set_problem_state($c, $problem, 'feedback pending');
+                }
                 $problem->update;
                 $c->res->redirect( '/admin/summary' );
             }
         }
 
-        $c->stash->{updates} = [ $c->model('DB::Comment')
-            ->search( { problem_id => $problem->id }, { order_by => 'created' } )
-            ->all ];
+        $c->stash->{sdm_disabled} = $editable ? '' : 'disabled';
+        $c->stash->{sdm_disabled_internal} = $problem->non_public ? 'disabled' : '';
+        $c->stash->{sdm_disabled_fixed} = $problem->is_fixed ? 'disabled' : '';
 
-        $self->stash_states($problem);
-        return 1;
-
+        return $self->admin_report_edit_done;
     }
 
     $self->stash_states($problem);
     return 0;
 
 }
+
+sub admin_report_edit_done {
+    my $self = shift;
+    my $c = $self->{c};
+    my $problem = $c->stash->{problem};
+    $c->stash->{updates} = [ $c->model('DB::Comment')
+        ->search( { problem_id => $problem->id }, { order_by => 'created' } )
+        ->all ];
+
+    $self->stash_states($problem);
+    return 1;
+}
+
 
 sub admin_district_lookup {
     my ($self, $row) = @_;
@@ -1053,6 +1058,7 @@ sub _admin_send_email {
     my ( $c, $template, $problem ) = @_;
 
     return unless $problem->get_extra_metadata('email_confirmed');
+    return if $problem->non_public;
 
     my $to = $problem->name
         ? [ $problem->user->email, $problem->name ]
@@ -1240,8 +1246,8 @@ sub admin_stats {
 sub export_as_csv {
     my ($self, $c, $params) = @_;
 
-    my $csv = $c->stash->{csv} = {
-        objects => $c->model('DB::Problem')->search_rs(
+    my $reporting = FixMyStreet::Reporting->new(
+        objects_rs => $c->model('DB::Problem')->search_rs(
             $params,
             {
                 join => ['admin_log_entries', 'user'],
@@ -1262,7 +1268,7 @@ sub export_as_csv {
                 ]
             }
         ),
-        headers => [
+        csv_headers => [
             'Report ID', 'Created', 'Sent to Agency', 'Last Updated',
             'E', 'N', 'Category', 'Status', 'Closure Status',
             'UserID', 'User email', 'User phone', 'User name',
@@ -1270,7 +1276,7 @@ sub export_as_csv {
             'Media URL', 'Interface Used', 'Council Response',
             'Strasse', 'Mast-Nr.', 'Haus-Nr.', 'Hydranten-Nr.',
         ],
-        columns => [
+        csv_columns => [
             'id', 'created', 'whensent',' lastupdate', 'local_coords_x',
             'local_coords_y', 'category', 'state', 'closure_status',
             'user_id', 'user_email', 'user_phone', 'user_name',
@@ -1278,11 +1284,11 @@ sub export_as_csv {
             'media_url', 'service', 'public_response',
             'strasse', 'mast_nr',' haus_nr', 'hydranten_nr',
         ],
-        extra_data => sub {
+        csv_extra_data => sub {
             my $report = shift;
 
             my $body_name = "";
-            if ( my $external_body = $report->body($c) ) {
+            if ( my $external_body = $report->body ) {
                 $body_name = $external_body->name || '[Unknown body]';
             }
 
@@ -1325,8 +1331,8 @@ sub export_as_csv {
             };
         },
         filename => 'stats',
-    };
-    $c->forward('/dashboard/generate_csv');
+    );
+    $reporting->generate_csv_http($c);
 }
 
 sub problem_confirm_email_extras {
@@ -1387,6 +1393,15 @@ sub hook_report_filter_status {
     @$status = map {
         $_ eq 'closed' ? ('closed', 'fixed') : $_
     } @$status;
+}
+
+# If report is made by a flagged user, mark as non-public
+sub report_new_munge_before_insert {
+    my ($self, $report) = @_;
+
+    if ($report->user->flagged) {
+        $report->non_public(1);
+    }
 }
 
 1;

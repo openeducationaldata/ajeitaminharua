@@ -313,6 +313,9 @@ legend,
         box-shadow: none;
         color: #888888;
     }
+    &[disabled] {
+        background-color: #eee;
+    }
 }
 
 select.form-control {
@@ -1967,6 +1970,15 @@ html.js #map .noscript {
     #{$left}: 0.3em;
     top:0.3em;
   }
+}
+
+#change_asset_mobile {
+    position: absolute;
+    bottom: 3em;
+    #{$left}: 0.25em;
+    padding: 0.25em;
+    color: #fff;
+    background-color: black;
 }
 
 .olControlAttribution {

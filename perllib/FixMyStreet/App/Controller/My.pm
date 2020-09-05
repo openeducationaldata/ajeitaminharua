@@ -157,7 +157,7 @@ sub get_problems : Private {
 
     while ( my $problem = $rs->next ) {
         $c->stash->{has_content}++;
-        push @$pins, $problem->pin_data($c, 'my', private => 1);
+        push @$pins, $problem->pin_data('my', private => 1);
         push @$problems, $problem;
     }
 
@@ -197,6 +197,9 @@ sub setup_page_data : Private {
         distinct => 1,
         order_by => [ "$table.category" ],
     } )->all;
+    # Ensure only uniquely named categories are shown
+    my %seen;
+    @categories = grep { !$seen{$_->category_display}++ } @categories;
     $c->stash->{filter_categories} = \@categories;
 
     if ($c->cobrand->enable_category_groups) {

@@ -240,12 +240,8 @@ sub check_and_stash_category : Private {
     $c->stash->{bodies_ids} = [ map { $_->id } @bodies];
     $c->{stash}->{list_of_names_as_string} = $csv->string;
 
-    my $where  = { body_id => [ keys %bodies ], };
-
-    my $cobrand_where = $c->cobrand->call_hook('munge_around_category_where', $where );
-    if ( $cobrand_where ) {
-       $where = $cobrand_where;
-    }
+    my $where = { body_id => [ keys %bodies ], };
+    $c->cobrand->call_hook('munge_around_category_where', $where);
 
     my @categories = $c->model('DB::Contact')->not_deleted->search(
         $where,
@@ -254,6 +250,9 @@ sub check_and_stash_category : Private {
             distinct => 1
         }
     )->all_sorted;
+    # Ensure only uniquely named categories are shown
+    my %seen;
+    @categories = grep { !$seen{$_->category_display}++ } @categories;
     $c->stash->{filter_categories} = \@categories;
     my %categories_mapped = map { $_->category => 1 } @categories;
     $c->forward('/report/stash_category_groups', [ \@categories ]) if $c->cobrand->enable_category_groups;
@@ -295,7 +294,7 @@ sub map_features : Private {
         @pins = map {
             # Here we might have a DB::Problem or a DB::Result::Nearby, we always want the problem.
             my $p = (ref $_ eq 'FixMyStreet::DB::Result::Nearby') ? $_->problem : $_;
-            $p->pin_data($c, 'around');
+            $p->pin_data('around');
         } @$on_map, @$nearby;
     }
 

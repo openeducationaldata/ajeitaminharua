@@ -660,6 +660,17 @@ $.extend(fixmystreet.set_up, {
   },
 
   dropzone: function($context) {
+    if ('Dropzone' in window) {
+        Dropzone.autoDiscover = false;
+      } else {
+        return;
+      }
+
+    // we don't want to create this if we're offline (e.g using the inspector
+    // panel to add a photo) as the server side bit does not work.
+    if (!navigator.onLine) {
+      return;
+    }
 
     // Pass a jQuery element, eg $('.foobar'), into this function
     // to limit all the selectors to that element. Handy if you want
@@ -668,12 +679,6 @@ $.extend(fixmystreet.set_up, {
     // the whole page.
     if (typeof $context === undefined) {
         $context = $(document);
-    }
-
-    if ('Dropzone' in window) {
-      Dropzone.autoDiscover = false;
-    } else {
-      return;
     }
 
     var forms = $('[for="form_photo"], .js-photo-label', $context).closest('form');
@@ -887,9 +892,15 @@ $.extend(fixmystreet.set_up, {
             .prependTo('#sub_map_links');
     }
 
-    $('#toggle-fullscreen').off('click').on('click', function() {
+    $('#toggle-fullscreen').off('click').on('click', function(e) {
+      e.preventDefault();
       var btnClass = $('html').hasClass('map-fullscreen') ? 'expand' : 'compress';
       var text = $(this).data(btnClass + '-text');
+
+      // Inspector form asset changing
+      if ($('html').hasClass('map-fullscreen') && $('.btn--change-asset').hasClass('asset-spot')) {
+          $('.btn--change-asset').click();
+      }
 
       $('html').toggleClass('map-fullscreen only-map');
       $(this).html(text).attr('class', btnClass);
@@ -1117,7 +1128,7 @@ $.extend(fixmystreet.set_up, {
         e.preventDefault();
         var form = $('<form/>').attr({ method:'post', action:"/alert/subscribe" });
         form.append($('<input name="alert" value="Subscribe me to an email alert" type="hidden" />'));
-        $(this).closest('.js-alert-list').find('input[type=email], input[type=text], input[type=hidden], input[type=radio]:checked').each(function() {
+        $(this).closest('.js-alert-list').find('textarea, input[type=email], input[type=text], input[type=hidden], input[type=radio]:checked').each(function() {
             var $v = $(this);
             $('<input/>').attr({ name:$v.attr('name'), value:$v.val(), type:'hidden' }).appendTo(form);
         });
@@ -1542,6 +1553,9 @@ fixmystreet.display = {
         var $reportPage = $(html),
             $twoColReport = $reportPage.find('.two_column_sidebar'),
             $sideReport = $reportPage.find('#side-report');
+
+        // Set this from report page in case change asset used and therefore relevant() function
+        fixmystreet.bodies = fixmystreet.utils.csv_to_array($reportPage.find('#js-map-data').data('bodies'))[0];
 
         if ($sideReport.length) {
             $('#side').hide(); // Hide the list of reports

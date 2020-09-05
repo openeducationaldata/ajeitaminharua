@@ -2,8 +2,11 @@ package FixMyStreet::Cobrand::UK;
 use base 'FixMyStreet::Cobrand::Default';
 use strict;
 
+use Encode;
 use JSON::MaybeXS;
 use LWP::UserAgent;
+use Path::Tiny;
+use Time::Piece;
 use mySociety::MaPit;
 use mySociety::VotingArea;
 use Utils;
@@ -398,9 +401,9 @@ sub link_to_council_cobrand {
          $handler->moniker ne $self->{c}->cobrand->moniker
        ) {
         my $url = sprintf("%s%s", $handler->base_url, $problem->url);
-        return sprintf("<a href='%s'>%s</a>", $url, $problem->body( $self->{c} ));
+        return sprintf("<a href='%s'>%s</a>", $url, $problem->body);
     } else {
-        return $problem->body( $self->{c} );
+        return $problem->body;
     }
 }
 
@@ -427,8 +430,8 @@ sub requires_recaptcha {
 
     return 0 if $c->user_exists;
     return 0 if !FixMyStreet->config('RECAPTCHA');
+    return 0 unless $c->action =~ /^(alert|report|around)/;
     return 0 if $c->user_country eq 'GB';
-    return 0 unless $c->action =~ /^(alert|report)/;
     return 1;
 }
 
@@ -447,6 +450,46 @@ sub check_recaptcha {
     $res = decode_json($res->content);
     $c->detach('/page_error_400_bad_request', ['Bad recaptcha'])
         unless $res->{success};
+}
+
+sub is_public_holiday {
+    my %args = @_;
+    $args{date} ||= localtime;
+    $args{date} = $args{date}->date;
+    $args{nation} ||= 'england-and-wales';
+    my $json = _get_bank_holiday_json();
+    for my $event (@{$json->{$args{nation}}{events}}) {
+        if ($event->{date} eq $args{date}) {
+            return 1;
+        }
+    }
+}
+
+sub _get_bank_holiday_json {
+    my $file = 'bank-holidays.json';
+    my $cache_file = path(FixMyStreet->path_to("../data/$file"));
+    my $js;
+    if (-s $cache_file && -M $cache_file <= 7 && !FixMyStreet->config('STAGING_SITE')) {
+        # uncoverable statement
+        $js = $cache_file->slurp_utf8;
+    } else {
+        $js = _fetch_url("https://www.gov.uk/$file");
+        # uncoverable branch false
+        $js = decode_utf8($js) if !utf8::is_utf8($js);
+        if ($js && !FixMyStreet->config('STAGING_SITE')) {
+            # uncoverable statement
+            $cache_file->spew_utf8($js);
+        }
+    }
+    $js = JSON->new->decode($js) if $js;
+    return $js;
+}
+
+sub _fetch_url {
+    my $url = shift;
+    my $ua = LWP::UserAgent->new;
+    $ua->timeout(5);
+    $ua->get($url)->content;
 }
 
 1;

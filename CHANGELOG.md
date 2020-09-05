@@ -11,6 +11,7 @@
         - Add option of checking passwords against Have I Been Pwned.
         - Add aerial maps option to Bing and OSM maps.
         - Select matches for both filter category and group. #3110
+        - Add an extra zoom level to most map types. #3130
     - Changes:
         - Mark user as active when sent an email alert.
     - Bugfixes:
@@ -28,11 +29,15 @@
         - Improve moderation diff display in a few small ways. #3105
         - Do not have bootstrap run sudo commands. #2930
         - Fix lookups in templates of categories with &s.
+        - Fix a few obscure asset layer changing issues.
     - Admin improvements:
         - Display user name/email for contributed as reports. #2990
         - Interface for enabling anonymous reports for certain categories. #2989
         - Better sort admin user table.
         - Centralise update creation to include fields.
+        - Add full text index to speed up admin search.
+        - Offline process for CSV generation.
+        - Allow inspectors to change report asset.
     - Development improvements:
         - `#geolocate_link` is now easier to re-style. #3006
         - Links inside `#front-main` can be customised using `$primary_link_*` Sass variables. #3007
@@ -60,6 +65,7 @@
         - Disable category rename on Open311 categories when unprotected. #2957
         - In category admin, group is already shown elsewhere.
         - Add assigned_(users|categories)_only functionality.
+        - Inspectors can now include a photo with public updates. #2902
     - Bugfixes:
         - Application user in Docker container can't install packages. #2914
         - Look at all categories when sending reports.

@@ -325,7 +325,7 @@ sub format_problem_for_display : Private {
         $c->res->content_type('application/json; charset=utf-8');
 
         # encode_json doesn't like DateTime objects, so strip them out
-        my $report_hashref = $c->cobrand->problem_as_hashref( $problem, $c );
+        my $report_hashref = $c->cobrand->problem_as_hashref( $problem );
         delete $report_hashref->{created};
         delete $report_hashref->{confirmed};
 
@@ -333,7 +333,7 @@ sub format_problem_for_display : Private {
         my $content = $json->encode(
             {
                 report => $report_hashref,
-                updates => $c->cobrand->updates_as_hashref( $problem, $c ),
+                updates => $c->cobrand->updates_as_hashref( $problem ),
             }
         );
         $c->res->body( $content );
@@ -354,7 +354,7 @@ sub generate_map_tags : Private {
         latitude  => $problem->latitude,
         longitude => $problem->longitude,
         pins      => $problem->used_map
-            ? [ $problem->pin_data($c, 'report', type => 'big', draggable => 1) ]
+            ? [ $problem->pin_data('report', type => 'big', draggable => 1) ]
             : [],
     );
 
@@ -554,6 +554,12 @@ sub inspect : Private {
 
         $c->cobrand->call_hook(report_inspect_update_extra => $problem);
 
+        $c->forward('/photo/process_photo');
+        if ( my $photo_error  = delete $c->stash->{photo_error} ) {
+            $valid = 0;
+            push @{ $c->stash->{errors} }, $photo_error;
+        }
+
         if ($valid) {
             $problem->lastupdate( \'current_timestamp' );
             $problem->update;
@@ -574,6 +580,7 @@ sub inspect : Private {
                     created => $timestamp,
                     confirmed => $timestamp,
                     user => $c->user->obj,
+                    photo => $c->stash->{upload_fileid} || undef,
                     %update_params,
                 } );
             }
@@ -663,7 +670,7 @@ sub _nearby_json :Private {
     # Want to treat these as if they were on map
     $nearby = [ map { $_->problem } @$nearby ];
     my @pins = map {
-        my $p = $_->pin_data($c, 'around');
+        my $p = $_->pin_data('around');
         [ $p->{latitude}, $p->{longitude}, $p->{colour},
           $p->{id}, $p->{title}, $pin_size, JSON->false
         ]
