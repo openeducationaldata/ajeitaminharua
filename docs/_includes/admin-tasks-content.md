@@ -825,6 +825,19 @@ Click on ‘Templates’ in the admin menu. You will see a table of existing tem
 beside the status you wish to change. You may alter any of the fields as described in the section
 above, ‘Creating a template’. Additionally you can delete the template from this page.
 
+
+#### HTML content in templates
+
+HTML tags are permitted in response templates, which makes it possible to include
+hyperlinks or rich text formatting in the updates which are added to reports.
+
+Be aware that response templates are emailed to users as well as being shown on
+the site, so it's best to keep any HTML formatting quite light-touch due to the
+quirks of email clients' rendering of HTML message.
+
+Refer to the section ["HTML Content in notices"](#html-content-in-notices) above for details of
+what tags and attributes are allowed.
+
 </div>
 
 <div class="admin-task" markdown="1" id="view-statistics">
@@ -862,6 +875,23 @@ Android device or via an iOS device).
 
 These statistics can be downloaded as a CSV document, suitable for use in a spreadsheet program
 such as Excel or your own reporting tools.
+
+#### Importing dashboard data automatically
+
+You may wish to automatically import data from the dashboard into your system on a regular basis.
+Once you set your chosen criteria on the dashboard page, make a note of the URL of the "Reports"
+or "Updates" link in the "Export as CSV" section.
+Then you should generate an access token by visiting your account page and then "Security" and
+generating a token from there.
+
+You can then specify that token either by appending it to the URL as an `access_token` parameter,
+or including it as an `Authorization: Bearer <token>` HTTP header in the request from your system.
+
+The `export` must be present in the URL, and controls how the CSV is generated.
+Reports can take some time to generate, so there are two different values for the parameter:
+
+ - `export=1`: the response will wait until the file is ready and then provide it
+ - `export=2` (the default): you will immediately get a 202 HTTP response with a redirect to the location where the file will be once it has finished processing. This is more robust.
 
 #### Heatmap
 

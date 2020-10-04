@@ -51,10 +51,10 @@
             [% PROCESS "report/new/category_wrapper.html" %]
 
                 <label for="form_username_register">[% loc('Your email') %]</label>
-                [% IF field_errors.username %]
-                    <p class='form-error'>[% field_errors.username %]</p>
+                [% IF field_errors.username_register %]
+                    <p class='form-error'>[% field_errors.username_register %]</p>
                 [% END %]
-                <input class="form-control" type="email" value="[% email | html %]" name="username" id="form_username_register" required>
+                <input class="form-control" type="email" value="[% email | html %]" name="username_register" id="form_username_register" required>
 
                 <label for="form_name">[% loc('Name') %] [% loc('(optional)') %]</label>
                 [% IF field_errors.name %]
@@ -70,7 +70,10 @@
 
                 <div class="form-txt-submit-box">
                     [%# class of submit_sign_in so name can be optional, name of submit_register so it doesn't try and sign us in %]
-                    <p><input class="green-btn js-submit_sign_in" type="submit" name="submit_register" value="[% loc('Submit') %]">
+                    <p>
+                    <input class="desk-only green-btn js-submit_sign_in" type="submit" name="submit_register" value="[% loc('Submit') %]">
+                    <input class="mob-only green-btn js-submit_sign_in" type="submit" name="submit_register_mobile" value="[% loc('Submit') %]">
+                    </p>
                 </div>
 
         </div>

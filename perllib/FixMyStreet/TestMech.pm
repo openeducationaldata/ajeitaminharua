@@ -276,6 +276,24 @@ sub get_text_body_from_email {
     return $body;
 }
 
+sub get_html_body_from_email {
+    my ($mech, $email, $obj) = @_;
+    unless ($email) {
+        $email = $mech->get_email;
+        $mech->clear_emails_ok;
+    }
+
+    my $body;
+    $email->walk_parts(sub {
+        my $part = shift;
+        return if $part->subparts;
+        return if $part->content_type !~ m{text/html};
+        $body = $obj ? $part : $part->body_str;
+        ok $body, "Found HTML body";
+    });
+    return $body;
+}
+
 sub get_link_from_email {
     my ($mech, $email, $multiple, $mismatch) = @_;
     unless ($email) {
@@ -340,12 +358,13 @@ arrayref of TEXTs. If none found return empty arrayref.
 sub page_errors {
     my $mech   = shift;
     my $result = scraper {
-        process 'div.form-error, p.form-error, p.error, ul.error li', 'errors[]', 'TEXT';
+        process 'div.form-error, p.form-error, p.error, ul.error li, .search-help__header', 'errors[]', 'TEXT';
     }
     ->scrape( $mech->response );
     my $err = $result->{errors} || [];
     my %seen = ();
     $err = [ grep { not $seen{$_}++ } @$err ];
+    @$err = map { s/^\s+|\s+$//g; $_ } @$err;
     return $err;
 }
 
@@ -590,29 +609,6 @@ sub get_ok_json {
     return decode_json( $res->content );
 }
 
-sub delete_body {
-    my $mech = shift;
-    my $body = shift;
-
-    $mech->delete_problems_for_body($body->id);
-    $mech->delete_defect_type($_) for $body->defect_types;
-    $mech->delete_contact($_) for $body->contacts;
-    $mech->delete_user($_) for $body->users;
-    $_->delete for $body->response_templates;
-    $_->delete for $body->response_priorities;
-    $body->body_areas->delete;
-    $body->delete;
-}
-
-sub delete_contact {
-    my $mech = shift;
-    my $contact = shift;
-
-    $contact->contact_response_templates->delete_all;
-    $contact->contact_response_priorities->delete_all;
-    $contact->delete;
-}
-
 sub delete_problems_for_body {
     my $mech = shift;
     my $body = shift;
@@ -625,14 +621,6 @@ sub delete_problems_for_body {
         }
         $reports->delete;
     }
-}
-
-sub delete_defect_type {
-    my $mech = shift;
-    my $defect_type = shift;
-
-    $defect_type->contact_defect_types->delete_all;
-    $defect_type->delete;
 }
 
 sub delete_response_template {

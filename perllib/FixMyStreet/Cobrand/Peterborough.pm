@@ -32,6 +32,8 @@ sub disambiguate_location {
 
 sub get_geocoder { 'OSM' }
 
+sub contact_extra_fields { [ 'display_name' ] }
+
 sub geocoder_munge_results {
     my ($self, $result) = @_;
     $result->{display_name} = '' unless $result->{display_name} =~ /City of Peterborough/;
@@ -50,6 +52,15 @@ around open311_extra_data_include => sub {
             my ($ref) = grep { $_->{name} =~ /pcc-Skanska-csc-ref/i } @{$row->get_extra_fields};
             $_->{value} .= "\n\nSkanska CSC ref: $ref->{value}" if $ref;
         }
+    }
+    if ( $row->geocode && $row->contact->email =~ /Bartec/ ) {
+        my $address = $row->geocode->{resourceSets}->[0]->{resources}->[0]->{address};
+        my ($number, $street) = $address->{addressLine} =~ /\s*(\d*)\s*(.*)/;
+        push @$open311_only, (
+            { name => 'postcode', value => $address->{postalCode} },
+            { name => 'house_no', value => $number },
+            { name => 'street', value => $street }
+        );
     }
     return $open311_only;
 };

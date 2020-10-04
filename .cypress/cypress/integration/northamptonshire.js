@@ -7,8 +7,8 @@ it('prevents clicking unless asset selected', function() {
   cy.server();
   cy.fixture('bus_stops.json');
   cy.fixture('bus_stops_none.json');
-  cy.route('**/render-layer/**', 'fixture:bus_stops_none.json').as('empty-bus_stops-layer');
-  cy.route('**/16301/10787**', 'fixture:bus_stops.json').as('bus_stops-layer');
+  cy.route('**/northants.staging/**', 'fixture:bus_stops_none.json').as('empty-bus_stops-layer');
+  cy.route('**/32602/21575/**', 'fixture:bus_stops.json').as('bus_stops-layer');
   cy.route('/report/new/ajax*').as('report-ajax');
   cy.visit('http://northamptonshire.localhost:3001/');
   cy.get('[name=pc]').type('NN1 1NS');
@@ -29,8 +29,8 @@ it('selecting an asset allows a report', function() {
   cy.server();
   cy.fixture('bus_stops.json');
   cy.fixture('bus_stops_none.json');
-  cy.route('**/render-layer/**', 'fixture:bus_stops_none.json').as('empty-bus_stops-layer');
-  cy.route('**/16301/10787**', 'fixture:bus_stops.json').as('bus_stops-layer');
+  cy.route('**/northants.staging/**', 'fixture:bus_stops_none.json').as('empty-bus_stops-layer');
+  cy.route('**/32602/21575/**', 'fixture:bus_stops.json').as('bus_stops-layer');
   cy.route('/report/new/ajax*').as('report-ajax');
   cy.visit('http://northamptonshire.localhost:3001/');
   cy.get('[name=pc]').type('NN1 2NS');
@@ -51,9 +51,9 @@ it('detects multiple assets at same location', function() {
   cy.server();
   cy.fixture('bus_stops.json');
   cy.fixture('bus_stops_none.json');
-  cy.route('**/render-layer/**', 'fixture:bus_stops_none.json').as('empty-bus_stops-layer');
-  cy.route('**/16301/10787**', 'fixture:bus_stops.json').as('bus_stops-layer');
-  cy.route('**/16301/10788**', 'fixture:bus_stops.json').as('bus_stops-layer2');
+  cy.route('**/northants.staging/**', 'fixture:bus_stops_none.json').as('empty-bus_stops-layer');
+  cy.route('**/32602/21575/**', 'fixture:bus_stops.json').as('bus_stops-layer');
+  cy.route('**/32602/21576/**', 'fixture:bus_stops.json').as('bus_stops-layer2');
   cy.route('/report/new/ajax*').as('report-ajax');
   cy.visit('http://northamptonshire.localhost:3001/');
   cy.get('[name=pc]').type('NN1 2NS');

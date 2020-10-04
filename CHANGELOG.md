@@ -12,6 +12,7 @@
         - Add aerial maps option to Bing and OSM maps.
         - Select matches for both filter category and group. #3110
         - Add an extra zoom level to most map types. #3130
+        - Improve new report form when using phone verification.
     - Changes:
         - Mark user as active when sent an email alert.
     - Bugfixes:
@@ -30,6 +31,9 @@
         - Do not have bootstrap run sudo commands. #2930
         - Fix lookups in templates of categories with &s.
         - Fix a few obscure asset layer changing issues.
+        - Fix multiple disable messages for dropdown answers
+        - Do not trigger duplicate check when checking stoppers
+        - Do not strip spaces from middle of Open311 category codes. #3167
     - Admin improvements:
         - Display user name/email for contributed as reports. #2990
         - Interface for enabling anonymous reports for certain categories. #2989
@@ -38,6 +42,10 @@
         - Add full text index to speed up admin search.
         - Offline process for CSV generation.
         - Allow inspectors to change report asset.
+        - Staff users can use HTML tags in updates. #3143
+        - Response templates can include HTML tags. #3143
+        - Record whether report made on desktop or mobile.
+        - Do not display deleted priorities in inspect form. #3195
     - Development improvements:
         - `#geolocate_link` is now easier to re-style. #3006
         - Links inside `#front-main` can be customised using `$primary_link_*` Sass variables. #3007
@@ -49,6 +57,7 @@
         - Rewrite open311-update-reports to share code and improve functionality.
     - UK:
         - Add option for recaptcha. #3050
+        - Display search tips when location search returns no results. #3180
 
 * v3.0.1 (6th May 2020)
     - New features:
