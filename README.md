@@ -6,9 +6,9 @@ AjeitaMinhaRua é uma plataforma de código aberto com a base de código modific
 No momento, o projeto se encontra nas fases finais de tradução. Você pode contribuir com a tradução do repositório base acessando o transifex ou abrindo um Pull Request para este repositório, atualizando o arquivo de tradução.
 * ~Ajustes de glossário para tradução~
 * ~Tradução~
+* ~Revisão~
+* ~Publicação do .po traduzido~
 * **Script de Inicialização**
-* **Revisão**
-* Publicação do .po traduzido
 
 ## Instalação
 O processo de instalação pode ser encontrado no próprio site do <https://fixmystreet.org/>. No entanto, estamos reunindo esforços para simplificar o processo e traduzi-lo para uso de falantes da língua portuguesa.
